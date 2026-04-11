@@ -1,0 +1,37 @@
+{
+  "plan_name": "科幻风格个人博客开发计划",
+  "tasks": [
+    {
+      "task_code": "TASK-001",
+      "task_name": "项目初始化与骨架结构",
+      "description": "创建项目目录结构，搭建 Astro 项目基础框架，配置 tailwind.config.mjs，引入 marked.js 和 highlight.js，建立 public/posts 目录用于存放 Markdown 文章",
+      "assignee": "kimi",
+      "depends_on": [],
+      "expected_output": "完整的 Astro 项目骨架，包含配置文件和目录结构"
+    },
+    {
+      "task_code": "TASK-002",
+      "task_name": "样式系统与首页布局",
+      "description": "实现科幻风格样式系统：深色主题配色、霓虹光效、网格背景动画；创建首页布局：Hero 区域（标题/副标题/背景光效）、文章卡片列表、页脚",
+      "assignee": "glm",
+      "depends_on": ["TASK-001"],
+      "expected_output": "style.css 和首页 index.astro，包含完整的视觉样式"
+    },
+    {
+      "task_code": "TASK-003",
+      "task_name": "文章详情页与Markdown渲染",
+      "description": "实现文章详情页 [slug].astro，使用 marked.js 解析 Markdown 内容，配置 highlight.js 代码高亮主题，实现文章导航（上一篇/下一篇）",
+      "assignee": "qwen",
+      "depends_on": ["TASK-001", "TASK-002"],
+      "expected_output": "文章详情页模板和 Markdown 渲染逻辑"
+    },
+    {
+      "task_code": "TASK-004",
+      "task_name": "集成测试与优化",
+      "description": "创建3-5篇示例 Markdown 文章，验证所有页面功能，测试响应式布局，验证代码高亮和动画效果",
+      "assignee": "minimax",
+      "depends_on": ["TASK-002", "TASK-003"],
+      "expected_output": "功能完整的博客网站，包含示例文章，所有功能正常运行"
+    }
+  ]
+}
