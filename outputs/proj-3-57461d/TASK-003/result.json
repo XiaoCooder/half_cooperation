@@ -1,0 +1,10 @@
+{
+  "task_code": "TASK-003",
+  "summary": "实现 AI 对话页面核心逻辑：数据管理（conversations 数组、currentConversationId）、渲染函数（renderSidebar、renderMessages）、事件处理（发送消息、新建对话、切换对话）、DOM 操作与事件绑定",
+  "artifacts": [
+    {
+      "path": "outputs/proj-3-57461d/TASK-003/app.js",
+      "description": "核心逻辑文件，包含数据管理、渲染、事件处理等全部功能"
+    }
+  ]
+}
