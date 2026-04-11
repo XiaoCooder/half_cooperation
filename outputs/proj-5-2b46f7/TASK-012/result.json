@@ -1,0 +1,63 @@
+{
+  "task_code": "TASK-012",
+  "task_name": "前端 - 新建/编辑文章页面",
+  "summary": "创建 /admin/new 和 /admin/edit.html?id={id} 页面，支持 Markdown 编辑器（工具栏+实时预览），集成分类选择、标签多选、Slug 自动生成等功能。",
+  "status": "completed",
+  "artifacts": [
+    "postEditorApi.ts",
+    "adminNew.astro",
+    "adminEditParam.astro",
+    "adminEditDynamic.astro",
+    "README.md"
+  ],
+  "pages": [
+    {
+      "path": "/admin/new",
+      "file": "adminNew.astro",
+      "description": "新建文章页面 - 包含 Markdown 编辑器、分类/标签选择"
+    },
+    {
+      "path": "/admin/edit.html?id={id}",
+      "file": "adminEditParam.astro",
+      "description": "编辑文章页面 - 通过查询参数加载文章并编辑"
+    }
+  ],
+  "features": [
+    "Markdown 编辑器工具栏（粗体、斜体、标题、链接、图片、代码、代码块、列表、引用）",
+    "实时预览（左侧编辑，右侧预览）",
+    "Slug 自动生成（从标题智能生成，支持手动修改）",
+    "分类下拉选择",
+    "标签多选（Ctrl/Cmd 多选）",
+    "封面图 URL 输入",
+    "摘要输入",
+    "发布状态切换",
+    "文章统计显示（创建时间、浏览量）",
+    "认证守卫（未登录跳转 /login）",
+    "科幻风格 UI（复用项目主题）"
+  ],
+  "modules": [
+    {
+      "file": "postEditorApi.ts",
+      "description": "文章编辑 API 客户端",
+      "functions": [
+        "fetchPostForEdit(postId) - 获取文章详情",
+        "createPost(input) - 创建文章",
+        "updatePost(postId, input) - 更新文章",
+        "fetchCategories() - 获取分类列表",
+        "fetchTags() - 获取标签列表",
+        "isLoggedIn() - 登录检查",
+        "redirectToLogin() - 跳转到登录"
+      ]
+    }
+  ],
+  "copy_commands": [
+    "cp postEditorApi.ts ../TASK-009/src/utils/postEditorApi.ts",
+    "cp adminNew.astro ../TASK-009/src/pages/admin/new.astro",
+    "cp adminEditParam.astro ../TASK-009/src/pages/admin/edit.astro"
+  ],
+  "dependencies": [
+    "TASK-010: 认证模块 (auth.ts, isLoggedIn, redirectToLogin)",
+    "TASK-011: 管理后台首页和 adminPostsApi.ts",
+    "marked: Markdown 解析库"
+  ]
+}

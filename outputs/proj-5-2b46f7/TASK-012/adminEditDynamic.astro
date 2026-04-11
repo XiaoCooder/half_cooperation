@@ -1,0 +1,23 @@
+---
+/**
+ * 编辑文章动态路由
+ * 任务码: TASK-012
+ * 路径: /admin/edit/[id]
+ * 重定向到独立页面
+ */
+
+// 由于 Astro 静态路由限制，这里使用客户端重定向
+// 实际页面逻辑在 adminEdit.astro 中
+---
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="refresh" content="0;url=/admin/edit.html">
+  <title>Redirecting...</title>
+</head>
+<body>
+  <p>Redirecting to editor...</p>
+</body>
+</html>

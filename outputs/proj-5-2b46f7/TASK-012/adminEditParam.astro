@@ -1,0 +1,378 @@
+---
+/**
+ * 编辑文章页面（使用查询参数）
+ * 任务码: TASK-012
+ * 路径: /admin/edit?id={postId}
+ */
+
+import Layout from '../../layouts/Layout.astro';
+---
+
+<Layout title="编辑文章 - 管理后台">
+  <div class="container mx-auto px-4 py-8 max-w-5xl">
+    <!-- 页面头部 -->
+    <div class="flex items-center justify-between mb-8">
+      <div>
+        <h1 class="text-2xl font-bold text-scifi-text">编辑文章</h1>
+        <p id="post-id-display" class="text-scifi-muted mt-1">加载中...</p>
+      </div>
+      <a
+        href="/admin"
+        class="px-4 py-2 rounded-lg border border-scifi-border text-scifi-muted hover:text-scifi-text hover:border-scifi-primary/50 transition-all"
+      >
+        ← 返回列表
+      </a>
+    </div>
+
+    <!-- 加载状态 -->
+    <div id="loading" class="flex items-center justify-center py-20">
+      <div class="animate-spin w-8 h-8 border-2 border-scifi-primary border-t-transparent rounded-full"></div>
+      <span class="ml-3 text-scifi-muted">加载文章中...</span>
+    </div>
+
+    <!-- 错误提示 -->
+    <div id="error-message" class="hidden mb-4 p-4 bg-red-500/10 border border-red-500/50 rounded-lg text-red-400"></div>
+
+    <!-- 成功提示 -->
+    <div id="success-message" class="hidden mb-4 p-4 bg-green-500/10 border border-green-500/50 rounded-lg text-green-400"></div>
+
+    <!-- 文章表单 -->
+    <form id="post-form" class="space-y-6 hidden">
+      <input type="hidden" id="post-id" name="post-id" />
+
+      <!-- 标题 -->
+      <div>
+        <label for="title" class="block text-sm font-medium text-sciri-text mb-2">
+          标题 <span class="text-red-400">*</span>
+        </label>
+        <input
+          type="text"
+          id="title"
+          name="title"
+          required
+          class="w-full px-4 py-3 bg-scifi-card border border-scifi-border rounded-lg text-scifi-text focus:outline-none focus:border-scifi-primary focus:ring-1 focus:ring-scifi-primary"
+          placeholder="输入文章标题"
+        />
+      </div>
+
+      <!-- Slug -->
+      <div>
+        <label for="slug" class="block text-sm font-medium text-scifi-text mb-2">
+          Slug
+        </label>
+        <input
+          type="text"
+          id="slug"
+          name="slug"
+          class="w-full px-4 py-3 bg-scifi-card border border-scifi-border rounded-lg text-scifi-text focus:outline-none focus:border-scifi-primary focus:ring-1 focus:ring-scifi-primary"
+        />
+        <p class="text-xs text-scifi-muted mt-1">URL: /posts/&lt;slug&gt;</p>
+      </div>
+
+      <!-- 摘要 -->
+      <div>
+        <label for="summary" class="block text-sm font-medium text-scifi-text mb-2">
+          摘要
+        </label>
+        <textarea
+          id="summary"
+          name="summary"
+          rows="2"
+          class="w-full px-4 py-3 bg-scifi-card border border-scifi-border rounded-lg text-scifi-text focus:outline-none focus:border-scifi-primary focus:ring-1 focus:ring-scifi-primary"
+        ></textarea>
+      </div>
+
+      <!-- 封面图 -->
+      <div>
+        <label for="cover_image" class="block text-sm font-medium text-scifi-text mb-2">
+          封面图
+        </label>
+        <input
+          type="text"
+          id="cover_image"
+          name="cover_image"
+          class="w-full px-4 py-3 bg-scifi-card border border-scifi-border rounded-lg text-scifi-text focus:outline-none focus:border-scifi-primary focus:ring-1 focus:ring-scifi-primary"
+        />
+      </div>
+
+      <!-- 分类和标签 -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label for="category_id" class="block text-sm font-medium text-scifi-text mb-2">
+            分类
+          </label>
+          <select
+            id="category_id"
+            name="category_id"
+            class="w-full px-4 py-3 bg-scifi-card border border-scifi-border rounded-lg text-scifi-text focus:outline-none focus:border-scifi-primary focus:ring-1 focus:ring-scifi-primary"
+          >
+            <option value="">选择分类</option>
+          </select>
+        </div>
+        <div>
+          <label for="tag_ids" class="block text-sm font-medium text-scifi-text mb-2">
+            标签 <span class="text-scifi-muted">(Ctrl/Cmd 多选)</span>
+          </label>
+          <select
+            id="tag_ids"
+            name="tag_ids"
+            multiple
+            class="w-full px-4 py-3 bg-scifi-card border border-scifi-border rounded-lg text-scifi-text focus:outline-none focus:border-scifi-primary focus:ring-1 focus:ring-scifi-primary h-24"
+          >
+          </select>
+        </div>
+      </div>
+
+      <!-- Markdown 编辑器 -->
+      <div>
+        <label class="block text-sm font-medium text-scifi-text mb-2">
+          内容 <span class="text-red-400">*</span>
+        </label>
+        <div class="border border-scifi-border rounded-lg overflow-hidden bg-scifi-card">
+          <!-- 工具栏 -->
+          <div class="flex items-center gap-1 px-4 py-2 bg-scifi-bg border-b border-scifi-border flex-wrap">
+            <button type="button" class="editor-btn" data-action="bold" title="粗体"><span class="font-bold">B</span></button>
+            <button type="button" class="editor-btn" data-action="italic" title="斜体"><span class="italic">I</span></button>
+            <button type="button" class="editor-btn" data-action="heading" title="标题"><span class="font-bold">H</span></button>
+            <div class="w-px h-6 bg-scifi-border mx-1"></div>
+            <button type="button" class="editor-btn" data-action="link" title="链接">🔗</button>
+            <button type="button" class="editor-btn" data-action="image" title="图片">🖼️</button>
+            <button type="button" class="editor-btn" data-action="code" title="代码">&lt;/&gt;</button>
+            <button type="button" class="editor-btn" data-action="codeblock" title="代码块">📦</button>
+            <div class="w-px h-6 bg-scifi-border mx-1"></div>
+            <button type="button" class="editor-btn" data-action="ul" title="无序列表">• List</button>
+            <button type="button" class="editor-btn" data-action="ol" title="有序列表">1. List</button>
+            <button type="button" class="editor-btn" data-action="quote" title="引用">"</button>
+            <div class="w-px h-6 bg-scifi-border mx-1"></div>
+            <button type="button" class="editor-btn" id="preview-toggle" title="预览">👁️</button>
+          </div>
+
+          <!-- 编辑器和预览 -->
+          <div id="editor-container" class="grid grid-cols-2">
+            <textarea
+              id="content"
+              name="content"
+              required
+              class="w-full h-96 px-4 py-3 bg-transparent text-scifi-text font-mono text-sm focus:outline-none resize-none"
+              placeholder="使用 Markdown 编写..."
+            ></textarea>
+            <div id="preview" class="h-96 px-4 py-3 overflow-auto border-l border-scifi-border prose prose-invert max-w-none">
+              <p class="text-scifi-muted">预览区域</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 发布选项 -->
+      <div class="flex items-center gap-6">
+        <label class="flex items-center gap-2 cursor-pointer">
+          <input type="checkbox" id="is_published" name="is_published" class="w-5 h-5 rounded" />
+          <span class="text-scifi-text">已发布</span>
+        </label>
+        <span id="post-stats" class="text-scifi-muted text-sm"></span>
+      </div>
+
+      <!-- 提交 -->
+      <div class="flex items-center justify-end gap-4 pt-4 border-t border-scifi-border">
+        <a href="/admin" class="px-6 py-3 rounded-lg border border-scifi-border text-scifi-muted hover:text-scifi-text">取消</a>
+        <button type="submit" id="submit-btn" class="px-6 py-3 rounded-lg bg-scifi-primary text-white font-medium hover:bg-scifi-primary/90">保存更改</button>
+      </div>
+    </form>
+  </div>
+</Layout>
+
+<script>
+  import { fetchPostForEdit, updatePost, fetchCategories, fetchTags, isLoggedIn, redirectToLogin } from '../../utils/postEditorApi';
+  import { marked } from 'marked';
+
+  if (!isLoggedIn()) {
+    redirectToLogin();
+  }
+
+  // 获取文章 ID
+  const urlParams = new URLSearchParams(window.location.search);
+  const postId = parseInt(urlParams.get('id') || '');
+
+  const form = document.getElementById('post-form') as HTMLFormElement;
+  const loadingDiv = document.getElementById('loading') as HTMLDivElement;
+  const postIdDisplay = document.getElementById('post-id-display') as HTMLParagraphElement;
+  const titleInput = document.getElementById('title') as HTMLInputElement;
+  const slugInput = document.getElementById('slug') as HTMLInputElement;
+  const contentTextarea = document.getElementById('content') as HTMLTextAreaElement;
+  const previewDiv = document.getElementById('preview') as HTMLDivElement;
+  const previewToggle = document.getElementById('preview-toggle') as HTMLButtonElement;
+  const errorMessage = document.getElementById('error-message') as HTMLDivElement;
+  const successMessage = document.getElementById('success-message') as HTMLDivElement;
+  const categorySelect = document.getElementById('category_id') as HTMLSelectElement;
+  const tagSelect = document.getElementById('tag_ids') as HTMLSelectElement;
+  const submitBtn = document.getElementById('submit-btn') as HTMLButtonElement;
+  const postStats = document.getElementById('post-stats') as HTMLSpanElement;
+
+  let userModifiedSlug = false;
+
+  async function init() {
+    if (!postId || isNaN(postId)) {
+      loadingDiv.classList.add('hidden');
+      errorMessage.textContent = '无效的文章 ID';
+      errorMessage.classList.remove('hidden');
+      return;
+    }
+
+    try {
+      const [categories, tags] = await Promise.all([fetchCategories(), fetchTags()]);
+
+      categories.forEach((cat: any) => {
+        const option = document.createElement('option');
+        option.value = cat.id.toString();
+        option.textContent = cat.name;
+        categorySelect.appendChild(option);
+      });
+
+      tags.forEach((tag: any) => {
+        const option = document.createElement('option');
+        option.value = tag.id.toString();
+        option.textContent = tag.name;
+        tagSelect.appendChild(option);
+      });
+
+      const post = await fetchPostForEdit(postId);
+
+      titleInput.value = post.title;
+      slugInput.value = post.slug;
+      userModifiedSlug = true;
+      (document.getElementById('summary') as HTMLTextAreaElement).value = post.summary || '';
+      (document.getElementById('cover_image') as HTMLInputElement).value = post.cover_image || '';
+      contentTextarea.value = post.content;
+      (document.getElementById('is_published') as HTMLInputElement).checked = post.is_published;
+
+      if (post.category) categorySelect.value = post.category.id.toString();
+      if (post.tags?.length) {
+        const tagIds = post.tags.map((t: any) => t.id.toString());
+        Array.from(tagSelect.options).forEach((opt) => { if (tagIds.includes(opt.value)) opt.selected = true; });
+      }
+
+      postIdDisplay.textContent = `ID: ${post.id} | Slug: ${post.slug}`;
+      postStats.textContent = `创建于: ${new Date(post.created_at).toLocaleDateString('zh-CN')} | 浏览: ${post.view_count}`;
+
+      previewDiv.innerHTML = marked.parse(post.content) as string;
+      loadingDiv.classList.add('hidden');
+      form.classList.remove('hidden');
+    } catch (error: any) {
+      loadingDiv.classList.add('hidden');
+      errorMessage.textContent = error.message || '加载文章失败';
+      errorMessage.classList.remove('hidden');
+    }
+  }
+
+  function generateSlug(title: string): string {
+    return title.toLowerCase().replace(/[^\w\u4e00-\u9fa5]+/g, '-').replace(/^-+|-+$/g, '');
+  }
+
+  titleInput.addEventListener('input', () => { if (!userModifiedSlug) slugInput.value = generateSlug(titleInput.value); });
+  slugInput.addEventListener('input', () => { userModifiedSlug = true; });
+
+  let showPreview = true;
+  previewToggle.addEventListener('click', () => {
+    showPreview = !showPreview;
+    const container = document.getElementById('editor-container');
+    if (showPreview) {
+      container?.classList.replace('grid-cols-1', 'grid-cols-2');
+      contentTextarea.classList.remove('hidden');
+      previewDiv.classList.remove('hidden');
+    } else {
+      container?.classList.replace('grid-cols-2', 'grid-cols-1');
+      previewDiv.classList.add('hidden');
+    }
+  });
+
+  contentTextarea.addEventListener('input', () => {
+    previewDiv.innerHTML = contentTextarea.value ? marked.parse(contentTextarea.value) as string : '<p class="text-scifi-muted">预览区域</p>';
+  });
+
+  document.querySelectorAll('.editor-btn[data-action]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const action = (btn as HTMLElement).dataset.action;
+      const start = contentTextarea.selectionStart;
+      const end = contentTextarea.selectionEnd;
+      const selected = contentTextarea.value.substring(start, end);
+      const insertions: Record<string, [string, number]> = {
+        bold: [`**${selected || '粗体'}**`, selected ? 0 : 2],
+        italic: [`*${selected || '斜体'}*`, selected ? 0 : 1],
+        heading: [`## ${selected || '标题'}`, 3],
+        link: [`[${selected || '链接'}](url)`, selected ? -1 : 1],
+        image: [`![${selected || '描述'}](url)`, selected ? 0 : 2],
+        code: [`\`${selected || '代码'}\``, selected ? 0 : 1],
+        codeblock: [`\`\`\`\n${selected || '代码'}\n\`\`\``, 4],
+        ul: [`- ${selected || '项'}`, 3],
+        ol: [`1. ${selected || '项'}`, 3],
+        quote: [`> ${selected || '引用'}`, 2],
+      };
+      const [ins, offset] = insertions[action!] || ['', 0];
+      contentTextarea.value = contentTextarea.value.substring(0, start) + ins + contentTextarea.value.substring(end);
+      contentTextarea.focus();
+      contentTextarea.setSelectionRange(start + offset, start + offset);
+      contentTextarea.dispatchEvent(new Event('input'));
+    });
+  });
+
+  function showError(msg: string) {
+    errorMessage.textContent = msg;
+    errorMessage.classList.remove('hidden');
+    successMessage.classList.add('hidden');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function showSuccess(msg: string) {
+    successMessage.textContent = msg;
+    successMessage.classList.remove('hidden');
+    errorMessage.classList.add('hidden');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const title = titleInput.value.trim();
+    const slug = slugInput.value.trim();
+    const summary = (document.getElementById('summary') as HTMLTextAreaElement).value.trim();
+    const cover_image = (document.getElementById('cover_image') as HTMLInputElement).value.trim();
+    const content = contentTextarea.value;
+    const is_published = (document.getElementById('is_published') as HTMLInputElement).checked;
+    const category_id = categorySelect.value ? parseInt(categorySelect.value) : null;
+    const tag_ids = Array.from(tagSelect.selectedOptions).map((o) => parseInt(o.value));
+
+    if (!title || !content) { showError('请填写标题和内容'); return; }
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = '保存中...';
+
+    try {
+      await updatePost(postId, { title, slug, content, summary: summary || null, cover_image: cover_image || null, is_published, category_id, tag_ids: tag_ids.length ? tag_ids : null });
+      showSuccess('保存成功！');
+      postIdDisplay.textContent = `ID: ${postId} | Slug: ${slug}`;
+    } catch (error: any) {
+      showError(error.message || '保存失败');
+      submitBtn.disabled = false;
+      submitBtn.textContent = '保存更改';
+    }
+  });
+
+  init();
+</script>
+
+<style>
+  .editor-btn { @apply w-8 h-8 flex items-center justify-center rounded bg-scifi-card border border-scifi-border text-scifi-muted hover:text-scifi-primary hover:border-scifi-primary transition-colors text-sm; }
+  textarea::-webkit-scrollbar, #preview::-webkit-scrollbar { width: 8px; }
+  textarea::-webkit-scrollbar-track, #preview::-webkit-scrollbar-track { background: transparent; }
+  textarea::-webkit-scrollbar-thumb, #preview::-webkit-scrollbar-thumb { background: #3b4f6b; border-radius: 4px; }
+  #preview :global(h1) { @apply text-2xl font-bold text-scifi-text mb-4 mt-6; }
+  #preview :global(h2) { @apply text-xl font-bold text-scifi-text mb-3 mt-5; }
+  #preview :global(h3) { @apply text-lg font-bold text-scifi-text mb-2 mt-4; }
+  #preview :global(p) { @apply text-scifi-text mb-4 leading-relaxed; }
+  #preview :global(ul), #preview :global(ol) { @apply mb-4 pl-6; }
+  #preview :global(li) { @apply text-scifi-text mb-1; }
+  #preview :global(code) { @apply bg-scifi-card px-1.5 py-0.5 rounded text-scifi-secondary font-mono text-sm; }
+  #preview :global(pre) { @apply bg-sciri-card p-4 rounded-lg overflow-x-auto mb-4; }
+  #preview :global(blockquote) { @apply border-l-4 border-scifi-primary pl-4 italic text-scifi-muted mb-4; }
+  #preview :global(a) { @apply text-scifi-primary hover:underline; }
+  #preview :global(img) { @apply max-w-full rounded-lg mb-4; }
+</style>
