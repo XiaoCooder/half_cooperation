@@ -1,0 +1,23 @@
+{
+  "task_code": "TASK-003",
+  "summary": "完成文章详情页与 Markdown 渲染实现。核心改动：(1) 将 [slug].astro 从客户端 fetch + 渲染改为服务端 SSR 渲染，使用 getStaticPaths 生成静态页面；(2) 使用 marked.js 在服务端解析 Markdown 内容，通过 set:html 直接注入渲染后的 HTML；(3) 实现 YAML frontmatter 解析，从 .md 文件中提取标题、日期、标签、摘要等元数据；(4) 配置完整的文章正文 CSS 样式（标题、代码块、引用、列表、表格），代码块使用 atom-one-dark 主题 + highlight.js 自动高亮；(5) 实现上一篇/下一篇文章导航，通过 posts 数据按日期排序后查找相邻文章；(6) 为所有 Markdown 文章添加 YAML frontmatter；(7) 在 posts.ts 中新增 getPrevPost/getNextPost/getAllPostSlugs 辅助函数。",
+  "artifacts": [
+    "src/pages/posts/[slug].astro",
+    "src/data/posts.ts",
+    "src/env.d.ts",
+    "public/posts/welcome.md",
+    "public/posts/astro-guide.md",
+    "public/posts/neon-design.md",
+    "public/posts/ai-chat-impl.md",
+    "src/layouts/Layout.astro",
+    "src/styles/global.css",
+    "src/pages/index.astro",
+    "src/pages/chat.astro",
+    "package.json",
+    "astro.config.mjs",
+    "tailwind.config.mjs",
+    "tsconfig.json"
+  ],
+  "status": "completed",
+  "completed_at": "2026-04-11T16:00:00Z"
+}
