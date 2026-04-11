@@ -1,0 +1,63 @@
+{
+  "task_code": "TASK-006",
+  "task_name": "后端 - 文章 API 路由（管理）",
+  "summary": "实现了 JWT 认证模块和需认证的文章管理接口：POST /api/posts（创建）、PUT /api/posts/{id}（更新）、DELETE /api/posts/{id}（删除），支持作者/管理员权限校验和自动 slug 生成。",
+  "status": "completed",
+  "artifacts": [
+    "auth.py",
+    "posts_admin.py",
+    "router_integration.py",
+    "test_posts_admin.py",
+    "README.md"
+  ],
+  "endpoints": [
+    {
+      "method": "POST",
+      "path": "/api/posts",
+      "description": "创建文章（已登录用户），自动 slug 生成，支持标签关联",
+      "auth": "Bearer token",
+      "response": "PostResponse",
+      "status": 201
+    },
+    {
+      "method": "PUT",
+      "path": "/api/posts/{id}",
+      "description": "更新文章（作者或管理员），部分更新",
+      "auth": "Bearer token",
+      "response": "PostResponse"
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/posts/{id}",
+      "description": "删除文章（作者或管理员）",
+      "auth": "Bearer token",
+      "status": 204
+    }
+  ],
+  "auth": {
+    "scheme": "JWT Bearer",
+    "algorithm": "HS256",
+    "token_url": "/api/auth/login",
+    "dependencies": [
+      "get_current_user - 验证登录用户",
+      "get_current_admin_user - 验证管理员"
+    ]
+  },
+  "permissions": {
+    "create": "Any authenticated user",
+    "update": "Author or admin",
+    "delete": "Author or admin"
+  },
+  "dependencies": [
+    "TASK-001: FastAPI 项目基础、config.py（SECRET_KEY）",
+    "TASK-002: 数据模型、Pydantic schemas、数据库工具"
+  ],
+  "key_design_decisions": [
+    "JWT HS256 算法，token payload 中 sub 字段存储 user_id",
+    "创建时未提供 slug 则从 title 自动生成并保证唯一",
+    "更新使用 model_dump(exclude_unset=True) 实现部分更新",
+    "标签同步：更新时替换全部标签关联",
+    "从未发布变为已发布时自动设置 published_at",
+    "内联 _slugify 函数，避免新增 python-slugify 依赖"
+  ]
+}
