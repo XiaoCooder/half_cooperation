@@ -1,0 +1,127 @@
+{
+  "task_code": "TASK-003",
+  "task_name": "后端 - 用户认证逻辑",
+  "summary": "完成用户认证模块实现，包括密码哈希(bcrypt)、JWT Token生成与验证、认证服务层、认证路由及依赖注入。",
+  "status": "completed",
+  "artifacts": [
+    "security.py",
+    "auth.py",
+    "auth_service.py",
+    "auth_router.py",
+    "auth_schemas.py",
+    "dependencies.py",
+    "main_with_auth.py",
+    "test_auth.py",
+    "README.md"
+  ],
+  "dependencies": [
+    "passlib",
+    "bcrypt",
+    "python-jose[cryptography]",
+    "pydantic[email]",
+    "pytest",
+    "pytest-cov"
+  ],
+  "api_endpoints": [
+    {
+      "path": "/auth/register",
+      "method": "POST",
+      "auth": false,
+      "description": "用户注册"
+    },
+    {
+      "path": "/auth/login",
+      "method": "POST",
+      "auth": false,
+      "description": "用户登录(JSON格式)"
+    },
+    {
+      "path": "/auth/login/form",
+      "method": "POST",
+      "auth": false,
+      "description": "用户登录(OAuth2表单)"
+    },
+    {
+      "path": "/auth/refresh",
+      "method": "POST",
+      "auth": false,
+      "description": "刷新Token"
+    },
+    {
+      "path": "/auth/me",
+      "method": "GET",
+      "auth": true,
+      "description": "获取当前用户信息"
+    },
+    {
+      "path": "/auth/me",
+      "method": "PATCH",
+      "auth": true,
+      "description": "更新用户信息"
+    },
+    {
+      "path": "/auth/me/password",
+      "method": "POST",
+      "auth": true,
+      "description": "修改密码"
+    },
+    {
+      "path": "/auth/logout",
+      "method": "POST",
+      "auth": true,
+      "description": "用户登出"
+    },
+    {
+      "path": "/auth/verify-token",
+      "method": "POST",
+      "auth": true,
+      "description": "验证Token有效性"
+    },
+    {
+      "path": "/auth/admin/users",
+      "method": "GET",
+      "auth": "admin",
+      "description": "列出所有用户"
+    },
+    {
+      "path": "/auth/admin/users/{user_id}/deactivate",
+      "method": "PATCH",
+      "auth": "admin",
+      "description": "禁用用户"
+    },
+    {
+      "path": "/auth/admin/users/{user_id}/activate",
+      "method": "PATCH",
+      "auth": "admin",
+      "description": "启用用户"
+    }
+  ],
+  "security_features": [
+    "bcrypt密码哈希(工作因子12)",
+    "自动salt处理",
+    "JWT Token(OAuth2密码模式)",
+    "Access Token 30分钟有效期",
+    "Refresh Token 7天有效期",
+    "Token类型验证",
+    "用户状态检查",
+    "管理员权限分离",
+    "密码哈希自动升级"
+  ],
+  "config": {
+    "SECRET_KEY": "your-secret-key-change-in-production-min-32-characters",
+    "ALGORITHM": "HS256",
+    "ACCESS_TOKEN_EXPIRE_MINUTES": 30,
+    "REFRESH_TOKEN_EXPIRE_DAYS": 7,
+    "bcrypt_rounds": 12
+  },
+  "integration": {
+    "router_import": "from auth_router import router as auth_router",
+    "router_include": "app.include_router(auth_router)",
+    "dependency_import": "from dependencies import get_current_user, get_current_admin_user"
+  },
+  "commands": [
+    "pip install passlib bcrypt python-jose[cryptography] pydantic[email]",
+    "python test_auth.py",
+    "pytest test_auth.py -v"
+  ]
+}
