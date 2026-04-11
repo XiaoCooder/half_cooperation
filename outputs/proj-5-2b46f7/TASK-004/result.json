@@ -1,0 +1,143 @@
+{
+  "task_code": "TASK-004",
+  "task_name": "后端 - 认证 API 路由",
+  "summary": "实现 /api/auth/login, /api/auth/logout, /api/auth/me 三个核心认证接口，整合TASK-002数据库配置和TASK-003认证逻辑。",
+  "status": "completed",
+  "artifacts": [
+    "auth_api.py",
+    "main.py",
+    "test_auth_api.py",
+    "examples.py",
+    "README.md"
+  ],
+  "dependencies": [
+    "fastapi",
+    "uvicorn",
+    "pytest",
+    "httpx",
+    "requests"
+  ],
+  "api_endpoints": [
+    {
+      "path": "/api/auth/login",
+      "method": "POST",
+      "auth": false,
+      "description": "用户登录(JSON格式)",
+      "request_body": {
+        "username": "string (3-50 chars)",
+        "password": "string (6-100 chars)"
+      },
+      "response": {
+        "access_token": "string",
+        "refresh_token": "string",
+        "token_type": "bearer",
+        "expires_in": "int"
+      }
+    },
+    {
+      "path": "/api/auth/login/form",
+      "method": "POST",
+      "auth": false,
+      "description": "用户登录(OAuth2表单格式)",
+      "request_body": "OAuth2PasswordRequestForm",
+      "response": "TokenResponse"
+    },
+    {
+      "path": "/api/auth/logout",
+      "method": "POST",
+      "auth": true,
+      "description": "用户登出",
+      "headers": {
+        "Authorization": "Bearer <token>"
+      },
+      "response": {
+        "message": "string",
+        "success": "boolean"
+      }
+    },
+    {
+      "path": "/api/auth/me",
+      "method": "GET",
+      "auth": true,
+      "description": "获取当前用户信息",
+      "headers": {
+        "Authorization": "Bearer <token>"
+      },
+      "response": {
+        "id": "int",
+        "username": "string",
+        "email": "string",
+        "nickname": "string|null",
+        "avatar": "string|null",
+        "bio": "string|null",
+        "is_active": "boolean",
+        "is_admin": "boolean",
+        "created_at": "datetime",
+        "updated_at": "datetime|null"
+      }
+    },
+    {
+      "path": "/api/auth/me",
+      "method": "PATCH",
+      "auth": true,
+      "description": "更新用户信息",
+      "headers": {
+        "Authorization": "Bearer <token>"
+      },
+      "request_body": {
+        "nickname": "string|null",
+        "bio": "string|null",
+        "avatar": "string|null"
+      },
+      "response": "UserInfoResponse"
+    },
+    {
+      "path": "/api/auth/refresh",
+      "method": "POST",
+      "auth": false,
+      "description": "刷新Token",
+      "request_body": {
+        "refresh_token": "string"
+      },
+      "response": "TokenResponse"
+    },
+    {
+      "path": "/api/auth/verify",
+      "method": "GET",
+      "auth": true,
+      "description": "验证Token有效性",
+      "headers": {
+        "Authorization": "Bearer <token>"
+      },
+      "response": {
+        "message": "string",
+        "success": "boolean"
+      }
+    }
+  ],
+  "integration": {
+    "task_002": {
+      "modules": ["database.py", "models.py"],
+      "imports": ["get_db", "User"]
+    },
+    "task_003": {
+      "modules": ["security.py", "auth.py", "auth_service.py"],
+      "imports": ["hash_password", "verify_password", "verify_access_token", "create_token_pair", "TokenPair", "AuthService"]
+    }
+  },
+  "router_config": {
+    "prefix": "/api/auth",
+    "tags": ["auth"],
+    "oauth2_token_url": "/api/auth/login"
+  },
+  "commands": [
+    "python main.py",
+    "pytest test_auth_api.py -v",
+    "python examples.py"
+  ],
+  "docs_url": {
+    "swagger": "/docs",
+    "redoc": "/redoc",
+    "openapi": "/openapi.json"
+  }
+}
