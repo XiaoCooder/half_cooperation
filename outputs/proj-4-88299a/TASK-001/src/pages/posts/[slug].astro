@@ -1,0 +1,55 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+// 获取路由参数
+const { slug } = Astro.params;
+---
+
+<Layout title={`${slug} | 科幻博客`}>
+  <main class="container mx-auto px-4 py-12 max-w-4xl">
+    <a href="/" class="text-scifi-muted hover:text-scifi-primary transition-colors font-mono mb-8 inline-block">
+      &lt; 返回首页
+    </a>
+
+    <article class="prose prose-invert prose-scifi max-w-none">
+      <div id="post-content" class="bg-scifi-card border border-scifi-border rounded-lg p-8">
+        <p class="text-scifi-muted font-mono">加载中...</p>
+      </div>
+    </article>
+  </main>
+
+  <script define:vars={{ slug }}>
+    // 客户端加载 Markdown 文章
+    async function loadPost() {
+      try {
+        const response = await fetch(`/posts/${slug}.md`);
+        if (!response.ok) throw new Error('文章未找到');
+
+        const markdown = await response.text();
+        // 使用 marked.js 解析（全局变量）
+        if (window.marked) {
+          const html = window.marked.parse(markdown);
+          document.getElementById('post-content').innerHTML = html;
+          // 重新高亮代码块
+          if (window.hljs) {
+            window.hljs.highlightAll();
+          }
+        } else {
+          document.getElementById('post-content').innerHTML = `<pre class="whitespace-pre-wrap">${markdown}</pre>`;
+        }
+      } catch (error) {
+        document.getElementById('post-content').innerHTML = `
+          <div class="text-center py-12">
+            <p class="text-scifi-accent text-xl mb-4">错误 404</p>
+            <p class="text-scifi-muted">文章未找到或加载失败</p>
+          </div>
+        `;
+      }
+    }
+
+    loadPost();
+  </script>
+
+  <!-- marked.js -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</Layout>

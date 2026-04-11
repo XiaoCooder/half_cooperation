@@ -1,0 +1,102 @@
+---
+import Layout from '../../layouts/Layout.astro';
+---
+
+<Layout title="AI 助手 | 科幻博客">
+  <main class="container mx-auto px-4 py-8 max-w-4xl h-screen flex flex-col">
+    <header class="flex items-center justify-between mb-6">
+      <a href="/" class="text-scifi-muted hover:text-scifi-primary transition-colors font-mono">
+        &lt; 返回首页
+      </a>
+      <h1 class="text-2xl font-bold text-scifi-primary font-mono">
+        AI 助手
+      </h1>
+    </header>
+
+    <!-- 聊天区域 -->
+    <div class="flex-1 bg-scifi-card border border-scifi-border rounded-lg overflow-hidden flex flex-col">
+      <!-- 消息列表 -->
+      <div id="chat-messages" class="flex-1 overflow-y-auto p-6 space-y-4">
+        <!-- 欢迎消息 -->
+        <div class="flex gap-4">
+          <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-scifi-secondary to-scifi-accent flex items-center justify-center flex-shrink-0">
+            <span class="text-white font-bold font-mono">AI</span>
+          </div>
+          <div class="bg-scifi-bg/50 rounded-lg p-4 max-w-[80%]">
+            <p class="text-scifi-text">你好！我是你的 AI 助手。有什么我可以帮助你的吗？</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 输入区域 -->
+      <div class="border-t border-scifi-border p-4">
+        <form id="chat-form" class="flex gap-3">
+          <input
+            type="text"
+            id="chat-input"
+            placeholder="输入消息..."
+            class="flex-1 bg-scifi-bg border border-scifi-border rounded-lg px-4 py-3 text-scifi-text placeholder-scifi-muted focus:outline-none focus:border-scifi-primary transition-colors font-mono"
+            autocomplete="off"
+          />
+          <button
+            type="submit"
+            class="px-6 py-3 bg-scifi-primary text-scifi-bg font-semibold rounded-lg hover:opacity-90 transition-opacity font-mono"
+          >
+            发送
+          </button>
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    const chatForm = document.getElementById('chat-form');
+    const chatInput = document.getElementById('chat-input');
+    const chatMessages = document.getElementById('chat-messages');
+
+    // 添加消息到聊天区域
+    function addMessage(content, isUser = false) {
+      const messageDiv = document.createElement('div');
+      messageDiv.className = 'flex gap-4 ' + (isUser ? 'flex-row-reverse' : '');
+
+      const avatar = isUser
+        ? `<div class="w-10 h-10 rounded-lg bg-scifi-border flex items-center justify-center flex-shrink-0"><span class="text-scifi-text font-bold font-mono">我</span></div>`
+        : `<div class="w-10 h-10 rounded-lg bg-gradient-to-br from-scifi-secondary to-scifi-accent flex items-center justify-center flex-shrink-0"><span class="text-white font-bold font-mono">AI</span></div>`;
+
+      messageDiv.innerHTML = `
+        ${avatar}
+        <div class="${isUser ? 'bg-scifi-primary/20' : 'bg-scifi-bg/50'} rounded-lg p-4 max-w-[80%]">
+          <p class="text-scifi-text font-mono">${escapeHtml(content)}</p>
+        </div>
+      `;
+
+      chatMessages.appendChild(messageDiv);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    // HTML 转义
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    // 处理表单提交
+    chatForm?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const message = chatInput?.value.trim();
+      if (!message) return;
+
+      // 添加用户消息
+      addMessage(message, true);
+      chatInput.value = '';
+
+      // TODO: 调用 AI API
+      // 暂时模拟回复
+      setTimeout(() => {
+        addMessage('收到你的消息：' + message + '\n\n（AI 集成功能待实现）');
+      }, 500);
+    });
+  </script>
+</Layout>

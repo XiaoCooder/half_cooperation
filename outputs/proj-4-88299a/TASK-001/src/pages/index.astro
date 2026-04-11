@@ -1,0 +1,58 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { posts } from '../data/posts';
+---
+
+<Layout title="首页 | 科幻博客">
+  <main class="container mx-auto px-4 py-12 max-w-4xl">
+    <!-- 头部区域 -->
+    <header class="text-center mb-16">
+      <h1 class="text-5xl font-bold mb-4 bg-gradient-to-r from-scifi-primary via-scifi-secondary to-scifi-accent bg-clip-text text-transparent">
+        科幻博客
+      </h1>
+      <p class="text-scifi-muted text-lg font-mono">
+        &lt;探索代码与想象的边界 /&gt;
+      </p>
+    </header>
+
+    <!-- 文章列表 -->
+    <section class="space-y-6">
+      <h2 class="text-2xl font-semibold text-scifi-primary mb-6 font-mono">
+        // 最新文章
+      </h2>
+
+      {posts.map(post => (
+        <article class="bg-scifi-card border border-scifi-border rounded-lg p-6 hover:border-scifi-primary transition-colors duration-300">
+          <a href={`/posts/${post.slug}`} class="block">
+            <h3 class="text-xl font-semibold mb-2 text-scifi-text hover:text-scifi-primary transition-colors">
+              {post.title}
+            </h3>
+            <p class="text-scifi-muted text-sm mb-3 font-mono">{post.date}</p>
+            {post.excerpt && (
+              <p class="text-scifi-text/80">{post.excerpt}</p>
+            )}
+            <div class="flex gap-2 mt-4">
+              {post.tags.map(tag => (
+                <span class="px-3 py-1 text-xs rounded-full bg-scifi-secondary/20 text-scifi-secondary border border-scifi-secondary/30">
+                  #{tag}
+                </span>
+              ))}
+            </div>
+          </a>
+        </article>
+      ))}
+    </section>
+
+    <!-- AI 对话入口 -->
+    <section class="mt-16 text-center">
+      <a
+        href="/chat"
+        class="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-scifi-secondary to-scifi-accent rounded-lg text-white font-semibold hover:opacity-90 transition-opacity animate-glow"
+      >
+        <span class="font-mono">&gt;</span>
+        与 AI 助手对话
+        <span class="font-mono">_</span>
+      </a>
+    </section>
+  </main>
+</Layout>

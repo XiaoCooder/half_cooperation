@@ -1,0 +1,57 @@
+---
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = '科幻风格个人博客' } = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="zh-CN" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{title}</title>
+  <meta name="description" content={description} />
+
+  <!-- 字体 -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <!-- highlight.js 样式 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+
+  <style is:global>
+    :root {
+      --scifi-primary: #00d4ff;
+      --scifi-secondary: #7000ff;
+      --scifi-accent: #ff006e;
+    }
+
+    body {
+      background-color: #0a0a0f;
+      color: #e0e0e0;
+      font-family: 'Inter', system-ui, sans-serif;
+    }
+
+    /* 代码高亮覆盖 */
+    .hljs {
+      background: #12121a !important;
+      border-radius: 0.5rem;
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-scifi-bg text-scifi-text antialiased">
+  <slot />
+
+  <!-- highlight.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      hljs.highlightAll();
+    });
+  </script>
+</body>
+</html>
