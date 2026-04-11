@@ -1,0 +1,26 @@
+{
+  "task_code": "TASK-013",
+  "summary": "完成首页和文章详情页的 API 集成。修改了 src/pages/index.astro 从后端 API 获取文章列表，修改了 src/pages/posts/[slug].astro 从后端 API 获取单篇文章详情。添加了超时控制（5秒）和降级策略（API 失败时使用本地数据），支持显示浏览次数。",
+  "artifacts": [
+    "outputs/proj-5-2b46f7/TASK-013/src/pages/index.astro",
+    "outputs/proj-5-2b46f7/TASK-013/src/pages/posts/[slug].astro",
+    "outputs/proj-5-2b46f7/TASK-013/src/utils/api.ts",
+    "outputs/proj-5-2b46f7/TASK-013/src/data/posts.ts",
+    "outputs/proj-5-2b46f7/TASK-013/astro.config.mjs",
+    "outputs/proj-5-2b46f7/TASK-013/README.md"
+  ],
+  "status": "completed",
+  "completed_at": "2026-04-11T16:45:00Z",
+  "api_integration": {
+    "endpoints": [
+      "GET /api/posts - 获取文章列表",
+      "GET /api/posts/{slug} - 获取文章详情"
+    ],
+    "features": [
+      "服务器端数据获取",
+      "5秒超时控制",
+      "API 降级到本地数据",
+      "支持浏览次数显示"
+    ]
+  }
+}
