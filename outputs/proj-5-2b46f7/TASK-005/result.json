@@ -1,0 +1,36 @@
+{
+  "task_code": "TASK-005",
+  "task_name": "后端 - 文章 API 路由（公开）",
+  "summary": "实现了公开文章接口：GET /api/posts（列表，支持分页、分类/标签筛选）和 GET /api/posts/{slug}（详情，含浏览次数统计），仅返回已发布文章，使用 joinedload 预加载关联数据。",
+  "status": "completed",
+  "artifacts": [
+    "posts.py",
+    "router_integration.py",
+    "test_posts_api.py",
+    "README.md"
+  ],
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/api/posts",
+      "description": "获取已发布文章列表，支持分页（page/page_size）和筛选（category/tag）",
+      "response": "PaginatedResponse[PostListResponse]"
+    },
+    {
+      "method": "GET",
+      "path": "/api/posts/{slug}",
+      "description": "通过 slug 获取文章详情，浏览次数 +1",
+      "response": "PostResponse"
+    }
+  ],
+  "dependencies": [
+    "TASK-001: FastAPI 项目基础、database.py、config.py",
+    "TASK-002: 数据模型、Pydantic schemas、数据库工具"
+  ],
+  "key_design_decisions": [
+    "仅返回 is_published=True 的文章",
+    "使用 joinedload 预加载 author/category/tags 避免 N+1 查询",
+    "详情接口访问时自动递增 view_count",
+    "列表接口支持按分类 slug 和标签 slug 筛选"
+  ]
+}
