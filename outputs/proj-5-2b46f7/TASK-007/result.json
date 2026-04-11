@@ -1,0 +1,36 @@
+{
+  "task_code": "TASK-007",
+  "task_name": "后端 - Markdown 文件存储",
+  "summary": "实现文章内容读写本地文件系统功能，提供 save_post、read_post、delete_post 等接口，集成路径遍历安全防护（validate_slug、get_safe_path），支持 slug 规范化和存储统计功能。",
+  "status": "completed",
+  "artifacts": [
+    "storage_config.py",
+    "file_utils.py",
+    "markdown_storage.py",
+    "README.md"
+  ],
+  "security_features": [
+    "路径遍历防护：拦截 ../、绝对路径、null 字节注入",
+    "文件名安全验证：只允许字母、数字、连字符、下划线",
+    "Slug 规范化：小写转换、空格转连字符、非法字符移除",
+    "文件大小限制：单文件最大 10MB",
+    "扩展名白名单：仅允许 .md 和 .markdown"
+  ],
+  "api": {
+    "save_post(slug, content, overwrite=False)": "保存文章到文件",
+    "read_post(slug)": "读取文章内容",
+    "delete_post(slug)": "删除文章",
+    "exists_post(slug)": "检查文章是否存在",
+    "list_posts()": "列出所有文章",
+    "get_post_metadata(slug)": "获取文章元数据",
+    "get_storage_stats()": "获取存储统计"
+  },
+  "exceptions": [
+    "FileSecurityError: 文件安全验证失败",
+    "PostNotFoundError: 文章不存在",
+    "PostExistsError: 文章已存在",
+    "StorageFullError: 存储空间不足",
+    "MarkdownStorageError: 其他存储错误"
+  ],
+  "storage_path": "outputs/proj-5-2b46f7/TASK-007/posts/content/"
+}
