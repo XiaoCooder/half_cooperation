@@ -1,0 +1,319 @@
+/* ========================================
+   AI 对话页面样式
+   ======================================== */
+
+/* CSS 变量 */
+:root {
+    --sidebar-width: 200px;
+    --primary-color: #3b82f6;
+    --primary-hover: #2563eb;
+    --primary-active: #1d4ed8;
+    --user-bubble-bg: #3b82f6;
+    --ai-bubble-bg: #e5e7eb;
+    --bg-light: #f9fafb;
+    --bg-white: #ffffff;
+    --border-color: #e5e7eb;
+    --text-primary: #111827;
+    --text-secondary: #6b7280;
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* 重置样式 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* ========================================
+   整体布局 - Flexbox
+   ======================================== */
+
+html, body {
+    height: 100%;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+    color: var(--text-primary);
+    background-color: var(--bg-light);
+}
+
+.app-container {
+    display: flex;
+    height: 100vh;
+    width: 100%;
+}
+
+/* ========================================
+   侧边栏样式 - 固定宽度 200px
+   ======================================== */
+
+.sidebar {
+    width: var(--sidebar-width);
+    min-width: var(--sidebar-width);
+    background-color: var(--bg-white);
+    border-right: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.sidebar-header {
+    padding: 16px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.new-chat-btn {
+    width: 100%;
+    padding: 10px 16px;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.new-chat-btn:hover {
+    background-color: var(--primary-hover);
+}
+
+.new-chat-btn:active {
+    background-color: var(--primary-active);
+    transform: scale(0.98);
+}
+
+.conversation-list-container {
+    flex: 1;
+    overflow-y: auto;
+    padding: 8px;
+}
+
+/* 对话列表项样式 */
+.conversation-item {
+    padding: 12px 16px;
+    margin-bottom: 4px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    font-size: 14px;
+    color: var(--text-secondary);
+}
+
+.conversation-item:hover {
+    background-color: var(--bg-light);
+}
+
+.conversation-item.active {
+    background-color: var(--bg-light);
+    color: var(--text-primary);
+    font-weight: 500;
+}
+
+/* ========================================
+   主区域样式
+   ======================================== */
+
+.main-area {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    overflow: hidden;
+}
+
+.message-list-container {
+    flex: 1;
+    overflow-y: auto;
+    padding: 24px;
+    background-color: var(--bg-light);
+}
+
+/* ========================================
+   消息气泡样式
+   ======================================== */
+
+.message {
+    display: flex;
+    margin-bottom: 16px;
+    max-width: 80%;
+}
+
+/* 用户消息 - 右对齐蓝色背景 */
+.message.user {
+    margin-left: auto;
+    justify-content: flex-end;
+}
+
+.message.user .message-bubble {
+    background-color: var(--user-bubble-bg);
+    color: white;
+    border-radius: 16px 16px 4px 16px;
+}
+
+/* AI 消息 - 左对齐灰色背景 */
+.message.ai {
+    margin-right: auto;
+    justify-content: flex-start;
+}
+
+.message.ai .message-bubble {
+    background-color: var(--ai-bubble-bg);
+    color: var(--text-primary);
+    border-radius: 16px 16px 16px 4px;
+}
+
+.message-bubble {
+    padding: 12px 16px;
+    max-width: 100%;
+    word-wrap: break-word;
+    box-shadow: var(--shadow-sm);
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+/* ========================================
+   输入区样式
+   ======================================== */
+
+.input-area {
+    display: flex;
+    gap: 12px;
+    padding: 16px 24px;
+    background-color: var(--bg-white);
+    border-top: 1px solid var(--border-color);
+}
+
+.message-input {
+    flex: 1;
+    padding: 12px 16px;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    font-size: 14px;
+    font-family: inherit;
+    resize: none;
+    min-height: 44px;
+    max-height: 150px;
+    line-height: 1.5;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.message-input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.message-input::placeholder {
+    color: var(--text-secondary);
+}
+
+.send-btn {
+    padding: 12px 24px;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    white-space: nowrap;
+}
+
+.send-btn:hover {
+    background-color: var(--primary-hover);
+}
+
+.send-btn:active {
+    background-color: var(--primary-active);
+    transform: scale(0.98);
+}
+
+.send-btn:disabled {
+    background-color: var(--border-color);
+    cursor: not-allowed;
+}
+
+/* ========================================
+   滚动条样式
+   ======================================== */
+
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: var(--border-color);
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: var(--text-secondary);
+}
+
+/* ========================================
+   响应式设计
+   ======================================== */
+
+@media (max-width: 768px) {
+    .sidebar {
+        position: fixed;
+        left: -200px;
+        height: 100vh;
+        z-index: 100;
+        transition: left 0.3s ease;
+    }
+
+    .sidebar.open {
+        left: 0;
+    }
+
+    .message {
+        max-width: 90%;
+    }
+}
+
+/* ========================================
+   加载状态
+   ======================================== */
+
+.typing-indicator {
+    display: flex;
+    gap: 4px;
+    padding: 12px 16px;
+}
+
+.typing-indicator span {
+    width: 8px;
+    height: 8px;
+    background-color: var(--text-secondary);
+    border-radius: 50%;
+    animation: typing 1.4s infinite;
+}
+
+.typing-indicator span:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.typing-indicator span:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+@keyframes typing {
+    0%, 60%, 100% {
+        transform: translateY(0);
+        opacity: 0.4;
+    }
+    30% {
+        transform: translateY(-4px);
+        opacity: 1;
+    }
+}
