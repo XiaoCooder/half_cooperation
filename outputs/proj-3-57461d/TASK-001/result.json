@@ -1,0 +1,10 @@
+{
+  "task_code": "TASK-001",
+  "summary": "创建 AI 对话页面的基础骨架结构，包含侧边栏（新建按钮、对话列表容器）和主区域（消息列表容器、输入区），并引入 style.css 和 app.js",
+  "artifacts": [
+    {
+      "path": "outputs/proj-3-57461d/TASK-001/index.html",
+      "description": "页面主文件，包含侧边栏和主区域的 HTML 结构"
+    }
+  ]
+}
