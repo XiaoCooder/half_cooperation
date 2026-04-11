@@ -1,0 +1,79 @@
+{
+  "task_code": "TASK-015",
+  "task_name": "端到端测试与验证",
+  "summary": "创建端到端集成测试，覆盖完整流程：健康检查 → 登录获取token → 创建文章 → 首页列表验证 → 文章详情验证(含浏览次数) → 更新文章 → 删除文章 → 验证从列表消失 + 详情404。另含认证边界、公开接口边界、分页测试。",
+  "status": "completed",
+  "artifacts": [
+    "test_e2e.py",
+    "e2e_runner.py",
+    "README.md"
+  ],
+  "test_suites": [
+    {
+      "name": "TestEndToEnd",
+      "description": "完整业务流程",
+      "tests": [
+        "健康检查 /health",
+        "根路径 /",
+        "登录 POST /api/auth/login",
+        "创建文章 POST /api/posts",
+        "首页列表 GET /api/posts",
+        "文章详情 GET /api/posts/{slug}",
+        "更新 PUT /api/posts/{id}",
+        "删除 DELETE /api/posts/{id}",
+        "验证列表不再包含",
+        "验证详情 404"
+      ]
+    },
+    {
+      "name": "TestAuthEdgeCases",
+      "description": "认证边界情况",
+      "tests": [
+        "错误密码 → 401",
+        "不存在用户 → 401",
+        "无认证创建 → 401",
+        "无效token → 401",
+        "无认证删除 → 401"
+      ]
+    },
+    {
+      "name": "TestPublicPostsEdgeCases",
+      "description": "公开接口边界",
+      "tests": [
+        "空列表",
+        "草稿不在列表中",
+        "草稿详情 → 404",
+        "不存在slug → 404"
+      ]
+    },
+    {
+      "name": "TestPagination",
+      "description": "分页功能",
+      "tests": [
+        "分页参数正确性",
+        "多页数据分割",
+        "非法参数 → 422"
+      ]
+    }
+  ],
+  "test_count": 25,
+  "run_commands": [
+    "pytest test_e2e.py -v -s",
+    "python e2e_runner.py"
+  ],
+  "dependencies": [
+    "TASK-001: FastAPI 基础",
+    "TASK-002: 数据库模型",
+    "TASK-003: JWT 认证基础",
+    "TASK-004: 认证 API 路由",
+    "TASK-005: 公开文章路由",
+    "TASK-006: 文章管理路由"
+  ],
+  "key_design_decisions": [
+    "使用内存 SQLite 避免状态污染",
+    "每个测试前重建数据库表 + 种子数据",
+    "e2e_runner.py 可独立运行，不依赖 pytest",
+    "测试按编号顺序执行验证完整流程",
+    "使用 TestClient 而非启动真实服务器"
+  ]
+}
