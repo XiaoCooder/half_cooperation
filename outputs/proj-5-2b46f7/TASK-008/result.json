@@ -1,0 +1,70 @@
+{
+  "task_code": "TASK-008",
+  "task_name": "后端 - CORS 与主应用配置",
+  "summary": "整合所有后端路由（认证、文章管理），配置 CORS 支持前端跨域访问，提供 main.py 主应用入口和 server.py 启动脚本，支持健康检查和请求日志中间件。",
+  "status": "completed",
+  "artifacts": [
+    "main.py",
+    "server.py",
+    "README.md",
+    "requirements.txt"
+  ],
+  "cors_config": {
+    "allow_origins": [
+      "http://localhost:5173",
+      "http://localhost:3000",
+      "http://localhost:8080",
+      "http://localhost:8000",
+      "http://127.0.0.1:5173",
+      "http://127.0.0.1:3000",
+      "http://127.0.0.1:8080"
+    ],
+    "allow_credentials": true,
+    "allow_methods": ["*"],
+    "allow_headers": ["*"],
+    "env_variable": "CORS_ORIGINS (逗号分隔多个)"
+  },
+  "routers": [
+    {
+      "prefix": "/api/auth",
+      "module": "auth_api",
+      "endpoints": ["login", "logout", "me", "refresh", "verify"]
+    },
+    {
+      "prefix": "/api/posts",
+      "module": "posts_admin",
+      "endpoints": ["create", "update", "delete"]
+    }
+  ],
+  "endpoints": [
+    {"path": "/", "method": "GET", "description": "API 信息"},
+    {"path": "/health", "method": "GET", "description": "健康检查"},
+    {"path": "/ping", "method": "GET", "description": "Ping"},
+    {"path": "/docs", "method": "GET", "description": "API 文档"},
+    {"path": "/redoc", "method": "GET", "description": "ReDoc 文档"},
+    {"path": "/openapi.json", "method": "GET", "description": "OpenAPI schema"}
+  ],
+  "commands": [
+    "python main.py",
+    "python server.py start",
+    "uvicorn main:app --host 0.0.0.0 --port 8000 --reload"
+  ],
+  "middleware": [
+    "CORSMiddleware - 跨域请求处理",
+    "log_requests - 请求日志记录"
+  ],
+  "startup_features": [
+    "数据库连接检查与初始化",
+    "路由自动注册与列表输出",
+    "请求日志中间件",
+    "CORS 配置"
+  ],
+  "integration": {
+    "TASK-001": "FastAPI 项目基础",
+    "TASK-002": "数据库配置与数据模型",
+    "TASK-003": "JWT 认证模块",
+    "TASK-004": "认证 API 路由",
+    "TASK-006": "文章管理 API",
+    "TASK-007": "Markdown 文件存储"
+  }
+}
