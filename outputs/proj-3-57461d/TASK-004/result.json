@@ -1,0 +1,30 @@
+{
+  "task_code": "TASK-004",
+  "summary": "集成测试与修复：修复了 JS 中类名不匹配的问题（message-content → message-bubble），确保 CSS 样式能正确应用；创建了完整的工作目录，包含 index.html、style.css、app.js 三个文件在同一目录，解决了前序任务中路径引用问题。功能验证：新建对话、切换对话、发送消息功能均已实现",
+  "artifacts": [
+    {
+      "path": "outputs/proj-3-57461d/TASK-004/index.html",
+      "description": "页面骨架 HTML 文件"
+    },
+    {
+      "path": "outputs/proj-3-57461d/TASK-004/style.css",
+      "description": "页面样式文件，包含 flexbox 布局、侧边栏、消息气泡、输入区样式"
+    },
+    {
+      "path": "outputs/proj-3-57461d/TASK-004/app.js",
+      "description": "核心逻辑文件，包含数据管理、渲染、事件处理（已修复类名问题）"
+    }
+  ],
+  "fixes": [
+    {
+      "issue": "CSS 类名不匹配",
+      "description": "JS 中使用 message-content 类，但 CSS 使用 message-bubble 类，导致样式无法应用",
+      "fix": "将 app.js 中的 message-content 改为 message-bubble"
+    },
+    {
+      "issue": "HTML 路径引用问题",
+      "description": "HTML 引用 style.css 和 app.js 时使用相对路径，但文件分布在不同任务目录",
+      "fix": "将三个文件放在同一目录 TASK-004 中，确保路径正确"
+    }
+  ]
+}
