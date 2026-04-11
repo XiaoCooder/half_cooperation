@@ -1,0 +1,125 @@
+{
+  "plan_name": "个人博客系统 - 前后端分离实现计划",
+  "tasks": [
+    {
+      "task_code": "TASK-001",
+      "task_name": "后端 - 项目初始化与依赖配置",
+      "description": "创建 FastAPI 后端项目结构，安装依赖包（fastapi, uvicorn, sqlalchemy, bcrypt, python-multipart）",
+      "assignee": "kimi",
+      "depends_on": [],
+      "expected_output": "backend/ 目录包含 main.py、requirements.txt，依赖安装完成"
+    },
+    {
+      "task_code": "TASK-002",
+      "task_name": "后端 - 数据库配置与数据模型",
+      "description": "创建 SQLite 数据库配置、users 和 posts 数据模型，创建数据库表",
+      "assignee": "kimi",
+      "depends_on": ["TASK-001"],
+      "expected_output": "backend/database.py, backend/models.py 创建完成，blog.db 数据库生成"
+    },
+    {
+      "task_code": "TASK-003",
+      "task_name": "后端 - 用户认证逻辑",
+      "description": "实现用户注册、密码哈希、Session 管理等认证逻辑",
+      "assignee": "glm",
+      "depends_on": ["TASK-002"],
+      "expected_output": "backend/auth.py 包含密码验证、session 创建与验证功能"
+    },
+    {
+      "task_code": "TASK-004",
+      "task_name": "后端 - 认证 API 路由",
+      "description": "实现 /api/auth/login, /api/auth/logout, /api/auth/me 三个认证接口",
+      "assignee": "glm",
+      "depends_on": ["TASK-003"],
+      "expected_output": "backend/routes/auth.py 包含完整的认证路由实现"
+    },
+    {
+      "task_code": "TASK-005",
+      "task_name": "后端 - 文章 API 路由（公开）",
+      "description": "实现公开的文章接口：GET /api/posts（列表，分页）、GET /api/posts/{slug}（详情）",
+      "assignee": "qwen",
+      "depends_on": ["TASK-002"],
+      "expected_output": "backend/routes/posts.py 包含公开的文章查询接口"
+    },
+    {
+      "task_code": "TASK-006",
+      "task_name": "后端 - 文章 API 路由（管理）",
+      "description": "实现需认证的文章管理接口：POST /api/posts（创建）、PUT /api/posts/{id}（更新）、DELETE /api/posts/{id}（删除）",
+      "assignee": "qwen",
+      "depends_on": ["TASK-005"],
+      "expected_output": "backend/routes/posts.py 包含完整的文章 CRUD 管理接口"
+    },
+    {
+      "task_code": "TASK-007",
+      "task_name": "后端 - Markdown 文件存储",
+      "description": "实现文章内容读写本地文件系统功能，处理文件安全（防止路径遍历）",
+      "assignee": "minimax",
+      "depends_on": ["TASK-002"],
+      "expected_output": "backend/utils/file_storage.py 实现 MD 文件读写"
+    },
+    {
+      "task_code": "TASK-008",
+      "task_name": "后端 - CORS 与主应用配置",
+      "description": "配置 CORS 允许前端访问，整合所有路由，启动服务测试",
+      "assignee": "minimax",
+      "depends_on": ["TASK-004", "TASK-006", "TASK-007"],
+      "expected_output": "backend/main.py 整合所有模块，后端可在 8000 端口启动"
+    },
+    {
+      "task_code": "TASK-009",
+      "task_name": "前端 - 项目基础结构",
+      "description": "从 TASK-004 复制 Astro 项目作为基础，配置 API 代理或直接调用后端",
+      "assignee": "kimi",
+      "depends_on": [],
+      "expected_output": "src/ 目录包含基础 Astro 项目结构"
+    },
+    {
+      "task_code": "TASK-010",
+      "task_name": "前端 - 登录页面",
+      "description": "创建 /login 页面，实现用户名密码表单，调用后端登录 API",
+      "assignee": "glm",
+      "depends_on": ["TASK-009", "TASK-004"],
+      "expected_output": "src/pages/login.astro 登录页面完成"
+    },
+    {
+      "task_code": "TASK-011",
+      "task_name": "前端 - 管理后台首页",
+      "description": "创建 /admin 页面，显示文章列表，需登录访问",
+      "assignee": "qwen",
+      "depends_on": ["TASK-010", "TASK-006"],
+      "expected_output": "src/pages/admin/index.astro 管理后台首页完成"
+    },
+    {
+      "task_code": "TASK-012",
+      "task_name": "前端 - 新建/编辑文章页面",
+      "description": "创建 /admin/new 和 /admin/edit/{id} 页面，支持 Markdown 编辑器",
+      "assignee": "minimax",
+      "depends_on": ["TASK-011"],
+      "expected_output": "src/pages/admin/new.astro 和 src/pages/admin/edit/[id].astro 完成"
+    },
+    {
+      "task_code": "TASK-013",
+      "task_name": "前端 - 首页与文章页 API 集成",
+      "description": "修改首页和文章详情页，从后端 API 获取数据而非静态数据",
+      "assignee": "kimi",
+      "depends_on": ["TASK-009", "TASK-005"],
+      "expected_output": "src/pages/index.astro 和 src/pages/posts/[slug].astro 改为动态获取"
+    },
+    {
+      "task_code": "TASK-014",
+      "task_name": "前端 - 认证状态管理",
+      "description": "实现前端认证状态管理（Cookie/Session），保护管理页面访问",
+      "assignee": "glm",
+      "depends_on": ["TASK-010", "TASK-011"],
+      "expected_output": "认证状态在前后端正确传递，管理页面受保护"
+    },
+    {
+      "task_code": "TASK-015",
+      "task_name": "端到端测试与验证",
+      "description": "启动前后端服务，测试完整流程：登录 -> 创建文章 -> 首页显示 -> 文章详情",
+      "assignee": "qwen",
+      "depends_on": ["TASK-008", "TASK-014"],
+      "expected_output": "所有功能端到端测试通过"
+    }
+  ]
+}
