@@ -1,0 +1,185 @@
+---
+/**
+ * 用户中心页面
+ * 任务码: TASK-010
+ * 显示登录用户信息，支持登出操作
+ */
+
+import Layout from '../layouts/Layout.astro';
+
+// 页面标题
+const pageTitle = '用户中心 - SciFi Blog';
+---
+
+<Layout title={pageTitle}>
+  <div class="min-h-[80vh] flex items-center justify-center px-4 py-12 hero-glow">
+    <div class="w-full max-w-2xl">
+      <!-- 用户信息卡片 -->
+      <div id="userCard" class="bg-scifi-card/80 backdrop-blur-md rounded-xl border border-scifi-border/50 p-8 relative">
+        <!-- 顶部装饰线 -->
+        <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-scifi-primary via-scifi-secondary to-scifi-accent rounded-t-xl"></div>
+
+        <!-- 未登录状态 -->
+        <div id="notLoggedIn" class="text-center py-8">
+          <div class="inline-flex items-center gap-2 mb-4">
+            <div class="w-10 h-10 rounded-lg bg-scifi-card border border-scifi-border flex items-center justify-center">
+              <svg class="w-6 h-6 text-scifi-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+              </svg>
+            </div>
+          </div>
+          <h2 class="text-xl font-bold text-scifi-text font-mono mb-2">
+            <span class="text-scifi-muted">// 未登录</span>
+          </h2>
+          <p class="text-scifi-muted text-sm font-mono mb-6">
+            请先登录以访问用户中心
+          </p>
+          <a
+            href="/login"
+            class="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-scifi-primary to-scifi-secondary text-white font-mono font-semibold rounded-lg hover:opacity-90 transition-all"
+          >
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
+            </svg>
+            前往登录
+          </a>
+        </div>
+
+        <!-- 已登录状态（由客户端脚本动态显示） -->
+        <div id="loggedIn" class="hidden">
+          <!-- 用户头像和基本信息 -->
+          <div class="flex items-center gap-4 mb-6">
+            <div class="w-16 h-16 rounded-xl bg-gradient-to-br from-scifi-primary to-scifi-secondary flex items-center justify-center pulse-glow">
+              <span id="userAvatar" class="text-white font-mono font-bold text-xl">&gt;_</span>
+            </div>
+            <div>
+              <h2 id="userDisplayName" class="text-xl font-bold text-scifi-text font-mono">
+                <!-- 动态填充 -->
+              </h2>
+              <p id="userEmail" class="text-scifi-muted text-sm font-mono">
+                <!-- 动态填充 -->
+              </p>
+            </div>
+          </div>
+
+          <!-- 用户详细信息 -->
+          <div class="space-y-4">
+            <div class="grid grid-cols-2 gap-4">
+              <!-- 用户名 -->
+              <div class="bg-scifi-bg/50 rounded-lg p-4 border border-scifi-border/30">
+                <p class="text-scifi-muted text-xs font-mono mb-1">// username</p>
+                <p id="userName" class="text-scifi-text font-mono">-</p>
+              </div>
+              <!-- 昵称 -->
+              <div class="bg-scifi-bg/50 rounded-lg p-4 border border-scifi-border/30">
+                <p class="text-scifi-muted text-xs font-mono mb-1">// nickname</p>
+                <p id="userNickname" class="text-scifi-text font-mono">-</p>
+              </div>
+            </div>
+
+            <!-- 个人简介 -->
+            <div class="bg-scifi-bg/50 rounded-lg p-4 border border-scifi-border/30">
+              <p class="text-scifi-muted text-xs font-mono mb-1">// bio</p>
+              <p id="userBio" class="text-scifi-text font-mono">-</p>
+            </div>
+
+            <!-- 注册时间 -->
+            <div class="bg-scifi-bg/50 rounded-lg p-4 border border-scifi-border/30">
+              <p class="text-scifi-muted text-xs font-mono mb-1">// created_at</p>
+              <p id="userCreatedAt" class="text-scifi-text font-mono">-</p>
+            </div>
+
+            <!-- 管理员标识 -->
+            <div id="adminBadge" class="hidden inline-flex items-center gap-2 px-3 py-1 bg-scifi-secondary/20 border border-scifi-secondary/50 rounded-full text-scifi-secondary text-xs font-mono">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+              </svg>
+              ADMIN
+            </div>
+          </div>
+
+          <!-- 操作按钮 -->
+          <div class="mt-6 flex gap-4">
+            <button
+              id="logoutButton"
+              class="flex-1 py-3 px-4 bg-scifi-card border border-scifi-border text-scifi-text font-mono rounded-lg hover:border-scifi-accent hover:text-scifi-accent transition-all"
+            >
+              <span class="flex items-center justify-center gap-2">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
+                </svg>
+                登出系统
+              </span>
+            </button>
+            <a
+              href="/"
+              class="flex-1 py-3 px-4 bg-gradient-to-r from-scifi-primary to-scifi-secondary text-white font-mono rounded-lg hover:opacity-90 transition-all text-center"
+            >
+              <span class="flex items-center justify-center gap-2">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                </svg>
+                返回首页
+              </span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<script>
+  import { isAuthenticated, getUserInfo, logout } from '../auth';
+
+  const notLoggedInEl = document.getElementById('notLoggedIn');
+  const loggedInEl = document.getElementById('loggedIn');
+  const logoutButton = document.getElementById('logoutButton');
+
+  // 检查登录状态
+  if (isAuthenticated()) {
+    const user = getUserInfo();
+
+    if (user) {
+      // 显示已登录状态
+      notLoggedInEl?.classList.add('hidden');
+      loggedInEl?.classList.remove('hidden');
+
+      // 填充用户信息
+      const displayName = document.getElementById('userDisplayName');
+      const email = document.getElementById('userEmail');
+      const userName = document.getElementById('userName');
+      const nickname = document.getElementById('userNickname');
+      const bio = document.getElementById('userBio');
+      const createdAt = document.getElementById('userCreatedAt');
+      const adminBadge = document.getElementById('adminBadge');
+      const avatar = document.getElementById('userAvatar');
+
+      if (displayName) displayName.textContent = user.nickname || user.username;
+      if (email) email.textContent = user.email;
+      if (userName) userName.textContent = user.username;
+      if (nickname) nickname.textContent = user.nickname || '-';
+      if (bio) bio.textContent = user.bio || '-';
+      if (createdAt) createdAt.textContent = new Date(user.created_at).toLocaleString('zh-CN');
+      if (avatar) avatar.textContent = user.username.substring(0, 2).toUpperCase();
+
+      // 管理员标识
+      if (user.is_admin) {
+        adminBadge?.classList.remove('hidden');
+      }
+    }
+  }
+
+  // 登出处理
+  logoutButton?.addEventListener('click', async () => {
+    try {
+      await logout();
+      // 刷新页面
+      window.location.reload();
+    } catch (error) {
+      console.error('Logout error:', error);
+      // 即使 API 失败，也清除本地状态并刷新
+      window.location.reload();
+    }
+  });
+</script>

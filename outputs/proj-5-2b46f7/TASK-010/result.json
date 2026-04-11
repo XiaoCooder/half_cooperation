@@ -1,0 +1,84 @@
+{
+  "task_code": "TASK-010",
+  "task_name": "前端 - 登录页面",
+  "summary": "创建 /login 登录页面，实现用户名密码表单，调用后端登录 API，包含认证工具模块和用户中心页面。",
+  "status": "completed",
+  "artifacts": [
+    "auth.ts",
+    "authStore.ts",
+    "login.astro",
+    "me.astro",
+    "README.md"
+  ],
+  "pages": [
+    {
+      "path": "/login",
+      "file": "login.astro",
+      "description": "登录页面 - 用户名密码表单"
+    },
+    {
+      "path": "/me",
+      "file": "me.astro",
+      "description": "用户中心 - 显示用户信息"
+    }
+  ],
+  "modules": [
+    {
+      "file": "auth.ts",
+      "description": "认证 API 工具 - 登录/登出/token管理",
+      "functions": [
+        "login(credentials)",
+        "logout()",
+        "getCurrentUser()",
+        "getAccessToken()",
+        "getRefreshToken()",
+        "refreshToken()",
+        "authFetch(url, options)",
+        "isAuthenticated()"
+      ]
+    },
+    {
+      "file": "authStore.ts",
+      "description": "认证状态管理 - 状态订阅",
+      "functions": [
+        "authStore.getState()",
+        "authStore.subscribe(listener)",
+        "authStore.login(credentials)",
+        "authStore.logout()",
+        "authStore.refreshUser()"
+      ]
+    }
+  ],
+  "integration": {
+    "task_004": {
+      "api_endpoints": [
+        "/api/auth/login",
+        "/api/auth/logout",
+        "/api/auth/me",
+        "/api/auth/refresh"
+      ]
+    },
+    "task_009": {
+      "frontend_base": "Astro + Tailwind CSS",
+      "style_system": "科幻风格主题",
+      "layout": "Layout.astro"
+    }
+  },
+  "features": [
+    "科幻风格登录表单",
+    "密码显示/隐藏切换",
+    "加载状态动画",
+    "错误提示显示",
+    "登录成功自动跳转",
+    "localStorage token 存储",
+    "Token 自动刷新",
+    "未登录状态提示",
+    "管理员标识显示"
+  ],
+  "copy_commands": [
+    "cp auth.ts ../TASK-009/src/utils/",
+    "cp authStore.ts ../TASK-009/src/utils/",
+    "cp login.astro ../TASK-009/src/pages/",
+    "cp me.astro ../TASK-009/src/pages/"
+  ]
+}
