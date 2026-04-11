@@ -1,0 +1,337 @@
+---
+/**
+ * 管理后台页面（增强版）
+ * 任务码: TASK-014
+ * 使用认证守卫保护页面，支持 Session 管理和 CSRF 防护
+ */
+
+// 页面标题
+const pageTitle = '管理后台 - SciFi Blog';
+---
+
+<!DOCTYPE html>
+<html lang="zh-CN" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{pageTitle}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style is:global>
+    .grid-background {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -100;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    /* Session 状态指示器 */
+    .session-indicator {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 1000;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      background: var(--scifi-card);
+      border: 1px solid var(--scifi-border);
+    }
+
+    .session-valid {
+      color: var(--neon-green);
+      border-color: rgba(0, 255, 136, 0.3);
+    }
+
+    .session-warning {
+      color: #fbbf24;
+      border-color: rgba(251, 191, 36, 0.3);
+    }
+
+    .session-expired {
+      color: var(--scifi-accent);
+      border-color: rgba(255, 0, 110, 0.3);
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-scifi-bg text-scifi-text antialiased flex flex-col">
+  <div class="grid-background"></div>
+
+  <!-- 管理后台导航栏 -->
+  <header class="sticky top-0 z-50 bg-scifi-bg/80 backdrop-blur-md border-b border-scifi-border/50">
+    <div class="container mx-auto px-4 py-4 max-w-6xl flex items-center justify-between">
+      <a href="/" class="flex items-center gap-2 group">
+        <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-scifi-primary to-scifi-secondary flex items-center justify-center pulse-glow">
+          <span class="text-white font-mono font-bold text-sm">&gt;_</span>
+        </div>
+        <span class="font-semibold text-scifi-text group-hover:text-scifi-primary transition-colors">
+          SciFi Admin
+        </span>
+      </a>
+      <div class="flex items-center gap-4">
+        <a href="/" class="font-mono text-sm text-scifi-muted hover:text-scifi-primary transition-colors">
+          返回前台
+        </a>
+        <div id="user-info" class="flex items-center gap-3 hidden">
+          <span id="user-display" class="font-mono text-sm text-scifi-secondary"></span>
+          <span id="admin-badge" class="px-2 py-1 text-xs font-mono rounded bg-scifi-secondary/20 border border-scifi-secondary/50 text-scifi-secondary hidden">ADMIN</span>
+        </div>
+        <button
+          id="logout-btn"
+          class="font-mono text-sm px-4 py-2 rounded-lg border border-red-500/30 text-red-400 hover:bg-red-500/10 hover:border-red-500 transition-all hidden"
+        >
+          登出
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- 主内容 -->
+  <main class="flex-1 relative z-10 py-8">
+    <div class="container mx-auto px-4 max-w-6xl">
+      <!-- 认证状态提示 -->
+      <div id="auth-checking" class="text-center py-16">
+        <div class="inline-block animate-spin rounded-full h-8 w-8 border-2 border-scifi-primary border-t-transparent"></div>
+        <p class="text-scifi-muted text-sm mt-4 font-mono">验证认证状态...</p>
+      </div>
+
+      <!-- 认证失败提示（不应看到此内容） -->
+      <div id="auth-failed" class="hidden text-center py-16">
+        <div class="text-6xl mb-4">🔒</div>
+        <p class="text-scifi-accent font-mono">认证失败</p>
+        <p class="text-scifi-muted text-sm mt-2">正在跳转到登录页面...</p>
+      </div>
+
+      <!-- 管理内容区域 -->
+      <div id="admin-content" class="hidden">
+        <!-- 页面标题 -->
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
+          <div>
+            <h1 class="text-2xl font-bold font-mono text-scifi-primary">管理控制台</h1>
+            <p class="text-scifi-muted text-sm mt-1">管理博客内容和系统设置</p>
+          </div>
+          <div class="flex gap-3">
+            <a
+              href="/admin/posts"
+              class="font-mono text-sm px-6 py-2.5 rounded-lg border border-scifi-border text-scifi-muted hover:border-scifi-primary hover:text-scifi-primary transition-all"
+            >
+              文章管理
+            </a>
+            <a
+              href="/admin/posts/new"
+              class="font-mono text-sm px-6 py-2.5 rounded-lg bg-gradient-to-r from-scifi-primary to-scifi-secondary text-white hover:opacity-90 transition-opacity"
+            >
+              + 新建文章
+            </a>
+          </div>
+        </div>
+
+        <!-- 快捷面板 -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+          <!-- 文章统计 -->
+          <div class="bg-scifi-card/50 backdrop-blur-sm border border-scifi-border rounded-xl p-6 hover:border-scifi-primary/50 transition-colors">
+            <div class="flex items-center gap-3 mb-4">
+              <div class="w-10 h-10 rounded-lg bg-scifi-primary/20 flex items-center justify-center">
+                <svg class="w-5 h-5 text-scifi-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+              </div>
+              <h3 class="font-mono text-sm text-scifi-text">文章统计</h3>
+            </div>
+            <div class="text-3xl font-bold font-mono text-scifi-primary" id="stat-posts">-</div>
+            <p class="text-scifi-muted text-xs font-mono mt-1">总文章数</p>
+          </div>
+
+          <!-- Session 信息 -->
+          <div class="bg-scifi-card/50 backdrop-blur-sm border border-scifi-border rounded-xl p-6 hover:border-scifi-secondary/50 transition-colors">
+            <div class="flex items-center gap-3 mb-4">
+              <div class="w-10 h-10 rounded-lg bg-scifi-secondary/20 flex items-center justify-center">
+                <svg class="w-5 h-5 text-scifi-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <h3 class="font-mono text-sm text-scifi-text">Session</h3>
+            </div>
+            <div class="text-3xl font-bold font-mono text-scifi-secondary" id="session-time">-</div>
+            <p class="text-scifi-muted text-xs font-mono mt-1">剩余有效时间</p>
+          </div>
+
+          <!-- 系统状态 -->
+          <div class="bg-scifi-card/50 backdrop-blur-sm border border-scifi-border rounded-xl p-6 hover:border-neon-green/50 transition-colors">
+            <div class="flex items-center gap-3 mb-4">
+              <div class="w-10 h-10 rounded-lg bg-neon-green/20 flex items-center justify-center">
+                <svg class="w-5 h-5 text-neon-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <h3 class="font-mono text-sm text-scifi-text">系统状态</h3>
+            </div>
+            <div class="text-3xl font-bold font-mono text-neon-green">ONLINE</div>
+            <p class="text-scifi-muted text-xs font-mono mt-1">系统正常运行</p>
+          </div>
+        </div>
+
+        <!-- 快捷操作 -->
+        <div class="bg-scifi-card/50 backdrop-blur-sm border border-scifi-border rounded-xl p-6">
+          <h2 class="font-mono text-lg text-scifi-primary mb-4">// 快捷操作</h2>
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <a href="/admin/posts" class="p-4 rounded-lg bg-scifi-bg/50 border border-scifi-border hover:border-scifi-primary hover:bg-scifi-primary/5 transition-all text-center group">
+              <svg class="w-6 h-6 mx-auto text-scifi-muted group-hover:text-scifi-primary transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+              </svg>
+              <span class="block mt-2 text-sm font-mono text-scifi-muted group-hover:text-scifi-text transition-colors">文章列表</span>
+            </a>
+            <a href="/admin/categories" class="p-4 rounded-lg bg-scifi-bg/50 border border-scifi-border hover:border-scifi-secondary hover:bg-scifi-secondary/5 transition-all text-center group">
+              <svg class="w-6 h-6 mx-auto text-scifi-muted group-hover:text-scifi-secondary transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.41.586l7 7a2 2 0 010 2.814l-7 7a2 2 0 01-2.814 0l-7-7A2 2 0 013 12V7a4 4 0 014-4h5" />
+              </svg>
+              <span class="block mt-2 text-sm font-mono text-scifi-muted group-hover:text-scifi-text transition-colors">分类管理</span>
+            </a>
+            <a href="/admin/tags" class="p-4 rounded-lg bg-scifi-bg/50 border border-scifi-border hover:border-scifi-accent hover:bg-scifi-accent/5 transition-all text-center group">
+              <svg class="w-6 h-6 mx-auto text-scifi-muted group-hover:text-scifi-accent transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.41.586l7 7a2 2 0 010 2.814l-7 7a2 2 0 01-2.814 0l-7-7A2 2 0 013 12V7a4 4 0 014-4h5" />
+              </svg>
+              <span class="block mt-2 text-sm font-mono text-scifi-muted group-hover:text-scifi-text transition-colors">标签管理</span>
+            </a>
+            <a href="/admin/settings" class="p-4 rounded-lg bg-scifi-bg/50 border border-scifi-border hover:border-neon-green hover:bg-neon-green/5 transition-all text-center group">
+              <svg class="w-6 h-6 mx-auto text-scifi-muted group-hover:text-neon-green transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+              <span class="block mt-2 text-sm font-mono text-scifi-muted group-hover:text-scifi-text transition-colors">系统设置</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Session 状态指示器 -->
+  <div id="session-indicator" class="session-indicator hidden">
+    <span id="session-status-icon">●</span>
+    <span id="session-status-text">Session: --</span>
+  </div>
+
+  <!-- 页脚 -->
+  <footer class="relative z-10 mt-auto border-t border-scifi-border/30 bg-scifi-card/50 backdrop-blur-sm">
+    <div class="container mx-auto px-4 py-4 max-w-6xl">
+      <p class="text-scifi-muted text-xs font-mono text-center">
+        &copy; 2025 SciFi Admin. Protected by AuthGuard.
+      </p>
+    </div>
+  </footer>
+</body>
+</html>
+
+<script>
+import { protectAdminPage, sessionManager } from '../utils/authMiddleware';
+import { authStateManager } from '../utils/authStateManager';
+
+// ============== DOM 元素 ==============
+const authCheckingEl = document.getElementById('auth-checking');
+const authFailedEl = document.getElementById('auth-failed');
+const adminContentEl = document.getElementById('admin-content');
+const userDisplayEl = document.getElementById('user-display');
+const adminBadgeEl = document.getElementById('admin-badge');
+const userInfoEl = document.getElementById('user-info');
+const logoutBtnEl = document.getElementById('logout-btn');
+const sessionIndicatorEl = document.getElementById('session-indicator');
+const sessionStatusIcon = document.getElementById('session-status-icon');
+const sessionStatusText = document.getElementById('session-status-text');
+const sessionTimeEl = document.getElementById('session-time');
+
+// ============== 认证守卫检查 ==============
+setTimeout(() => {
+  const authResult = protectAdminPage();
+
+  if (!authResult) {
+    // 认证失败，显示失败提示（跳转由中间件处理）
+    authCheckingEl?.classList.add('hidden');
+    authFailedEl?.classList.remove('hidden');
+    return;
+  }
+
+  // 认证成功，显示管理内容
+  authCheckingEl?.classList.add('hidden');
+  adminContentEl?.classList.remove('hidden');
+
+  // 显示用户信息
+  if (authResult.user) {
+    userDisplayEl.textContent = authResult.user.nickname || authResult.user.username;
+    userInfoEl?.classList.remove('hidden');
+    logoutBtnEl?.classList.remove('hidden');
+
+    if (authResult.user.is_admin) {
+      adminBadgeEl?.classList.remove('hidden');
+    }
+  }
+
+  // 显示 Session 指示器
+  sessionIndicatorEl?.classList.remove('hidden');
+  updateSessionDisplay();
+
+  // 启动 Session 监控
+  startSessionMonitor();
+
+}, 100);
+
+// ============== 登出 ==============
+logoutBtnEl?.addEventListener('click', async () => {
+  sessionManager.destroy();
+  window.location.href = '/login';
+});
+
+// ============== Session 显示更新 ==============
+function updateSessionDisplay(): void {
+  const remaining = sessionManager.getRemainingTime();
+
+  if (remaining <= 0) {
+    sessionStatusIcon?.textContent = '●';
+    sessionIndicatorEl?.classList.remove('session-valid', 'session-warning');
+    sessionIndicatorEl?.classList.add('session-expired');
+    sessionStatusText?.textContent = 'Session: 已过期';
+    sessionTimeEl?.textContent = '0分';
+  } else if (remaining < 300) { // 5 分钟
+    sessionStatusIcon?.textContent = '●';
+    sessionIndicatorEl?.classList.remove('session-valid', 'session-expired');
+    sessionIndicatorEl?.classList.add('session-warning');
+    sessionStatusText?.textContent = `Session: ${Math.floor(remaining / 60)}分`;
+    sessionTimeEl?.textContent = `${Math.floor(remaining / 60)}分`;
+  } else {
+    sessionStatusIcon?.textContent = '●';
+    sessionIndicatorEl?.classList.remove('session-warning', 'session-expired');
+    sessionIndicatorEl?.classList.add('session-valid');
+    sessionStatusText?.textContent = `Session: ${Math.floor(remaining / 60)}分`;
+    sessionTimeEl?.textContent = `${Math.floor(remaining / 60)}分`;
+  }
+}
+
+// ============== Session 监控 ==============
+function startSessionMonitor(): void {
+  // 每 30 秒检查一次
+  setInterval(() => {
+    authStateManager.checkSessionExpiry();
+    updateSessionDisplay();
+
+    // 如果即将过期，刷新
+    const remaining = sessionManager.getRemainingTime();
+    if (remaining > 0 && remaining < 300) {
+      sessionManager.refresh();
+      console.log('[SessionMonitor] Session refreshed');
+    }
+
+    // 如果已过期
+    if (remaining <= 0) {
+      console.warn('[SessionMonitor] Session expired, redirecting to login');
+      sessionManager.destroy();
+      window.location.href = `/login?redirect=${encodeURIComponent(window.location.pathname)}`;
+    }
+  }, 30000);
+}
+</script>
