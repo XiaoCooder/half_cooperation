@@ -1,0 +1,47 @@
+{
+  "task_code": "TASK-002",
+  "task_name": "后端 - 数据库配置与数据模型",
+  "summary": "完成 SQLite 数据库配置、users/posts/categories/tags 数据模型定义，以及数据库初始化脚本和种子数据工具。",
+  "status": "completed",
+  "artifacts": [
+    "database.py",
+    "models.py",
+    "schemas.py",
+    "init_database.py",
+    "seed_data.py",
+    "db_utils.py",
+    "README.md"
+  ],
+  "models": [
+    {
+      "name": "User",
+      "table": "users",
+      "fields": ["id", "username", "email", "hashed_password", "nickname", "avatar", "bio", "is_active", "is_admin", "created_at", "updated_at"]
+    },
+    {
+      "name": "Post",
+      "table": "posts",
+      "fields": ["id", "title", "slug", "content", "summary", "cover_image", "is_published", "view_count", "author_id", "category_id", "created_at", "updated_at", "published_at"]
+    },
+    {
+      "name": "Category",
+      "table": "categories",
+      "fields": ["id", "name", "slug", "description", "created_at"]
+    },
+    {
+      "name": "Tag",
+      "table": "tags",
+      "fields": ["id", "name", "slug", "created_at"]
+    }
+  ],
+  "relations": [
+    "User 1:N Post (作者-文章)",
+    "Category 1:N Post (分类-文章)",
+    "Post N:M Tag (文章-标签多对多)"
+  ],
+  "commands": [
+    "python init_database.py",
+    "python init_database.py --check",
+    "python seed_data.py"
+  ]
+}
