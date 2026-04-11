@@ -1,0 +1,230 @@
+{
+  "plan_name": "Sci-Fi Personal Blog Website Development",
+  "description": "A collaborative plan to build a sci-fi themed personal blog website using Astro and Tailwind CSS, with markdown content management.",
+  "tasks": [
+    {
+      "task_code": "T001",
+      "task_name": "Project Initialization and Configuration",
+      "description": "Initialize Astro project with Tailwind CSS, configure project structure, set up development environment. Create astro.config.mjs, tailwind.config.mjs, package.json with all necessary dependencies including syntax highlighting library.",
+      "assignee": "glm",
+      "depends_on": [],
+      "expected_output": {
+        "files": [
+          "blog/package.json",
+          "blog/astro.config.mjs",
+          "blog/tailwind.config.mjs",
+          "blog/tsconfig.json"
+        ],
+        "description": "Complete project scaffolding with configured Astro + Tailwind setup, ready for component development"
+      }
+    },
+    {
+      "task_code": "T002",
+      "task_name": "Design System and Global Styles",
+      "description": "Create the sci-fi design system including CSS variables for colors (#0a0a0f, #12121a, #00d4ff, #8b5cf6, #ec4899), typography settings, animation keyframes, and global utility classes. Implement glow effects, gradient backgrounds, and cyber-punk visual elements.",
+      "assignee": "kimi",
+      "depends_on": ["T001"],
+      "expected_output": {
+        "files": [
+          "blog/src/styles/global.css",
+          "blog/src/styles/animations.css"
+        ],
+        "description": "Complete design system with CSS variables, utility classes, and animation definitions"
+      }
+    },
+    {
+      "task_code": "T003",
+      "task_name": "Base Layout Component",
+      "description": "Create the main layout component with header (navigation), main content area, and footer. Include responsive design with mobile menu, implement cyber-punk styled borders and decorative elements, add social links to footer.",
+      "assignee": "qwen",
+      "depends_on": ["T001", "T002"],
+      "expected_output": {
+        "files": [
+          "blog/src/layouts/BaseLayout.astro",
+          "blog/src/components/Header.astro",
+          "blog/src/components/Footer.astro"
+        ],
+        "description": "Responsive base layout with header navigation and footer, styled with sci-fi theme"
+      }
+    },
+    {
+      "task_code": "T004",
+      "task_name": "Hero Section Component",
+      "description": "Create an animated Hero section with large title 'Blog', subtitle for personal bio, gradient background effects, floating geometric decorations, and subtle particle/grid animation. Implement entry animations with fade-in and slide-up effects.",
+      "assignee": "minimax",
+      "depends_on": ["T002", "T003"],
+      "expected_output": {
+        "files": [
+          "blog/src/components/Hero.astro"
+        ],
+        "description": "Animated hero section with gradient effects, geometric decorations, and cyber-punk styling"
+      }
+    },
+    {
+      "task_code": "T005",
+      "task_name": "Article Card Component",
+      "description": "Create a reusable article card component displaying title, date, tags, and excerpt. Implement hover effects with glow shadow, slight elevation, and smooth transitions. Support 1-2 column responsive grid layout.",
+      "assignee": "kimi",
+      "depends_on": ["T002", "T003"],
+      "expected_output": {
+        "files": [
+          "blog/src/components/ArticleCard.astro"
+        ],
+        "description": "Styled article card component with hover animations and responsive grid support"
+      }
+    },
+    {
+      "task_code": "T006",
+      "task_name": "Home Page Implementation",
+      "description": "Build the home page (index.astro) combining Hero section and article list. Fetch all markdown posts from posts directory, render article cards in grid layout, implement scroll-triggered reveal animations for cards.",
+      "assignee": "qwen",
+      "depends_on": ["T003", "T004", "T005"],
+      "expected_output": {
+        "files": [
+          "blog/src/pages/index.astro"
+        ],
+        "description": "Complete home page with hero section and animated article list"
+      }
+    },
+    {
+      "task_code": "T007",
+      "task_name": "Article Detail Page",
+      "description": "Create the article detail page template (post/[slug].astro) with markdown rendering, code syntax highlighting (using Shiki or Prism), styled code blocks with dark theme, image responsive handling, blockquote styling, and article navigation (prev/next).",
+      "assignee": "glm",
+      "depends_on": ["T003"],
+      "expected_output": {
+        "files": [
+          "blog/src/pages/post/[slug].astro",
+          "blog/src/components/ArticleNav.astro"
+        ],
+        "description": "Article detail page with full markdown rendering and syntax highlighting"
+      }
+    },
+    {
+      "task_code": "T008",
+      "task_name": "About Page",
+      "description": "Create the about page (about.astro) with personal introduction section, contact information display, and styled skill tags with glow effects. Maintain consistent sci-fi design language.",
+      "assignee": "minimax",
+      "depends_on": ["T003"],
+      "expected_output": {
+        "files": [
+          "blog/src/pages/about.astro",
+          "blog/src/components/SkillTag.astro"
+        ],
+        "description": "About page with personal info, contact links, and skill tags"
+      }
+    },
+    {
+      "task_code": "T009",
+      "task_name": "Sample Blog Articles",
+      "description": "Create 3-5 sample markdown articles with proper frontmatter (title, date, description, tags). Include varied content: code snippets, lists, blockquotes, images. Name files in YYYY-MM-DD-slug.md format. Place in public/posts/ directory.",
+      "assignee": "kimi",
+      "depends_on": [],
+      "expected_output": {
+        "files": [
+          "blog/public/posts/2024-01-15-hello-world.md",
+          "blog/public/posts/2024-02-20-getting-started-with-astro.md",
+          "blog/public/posts/2024-03-10-cyberpunk-design-trends.md",
+          "blog/public/posts/2024-03-25-web-performance-tips.md"
+        ],
+        "description": "4-5 sample markdown articles with varied content and proper frontmatter"
+      }
+    },
+    {
+      "task_code": "T010",
+      "task_name": "Responsive Design and Mobile Optimization",
+      "description": "Implement responsive breakpoints (desktop >1024px, tablet 768-1024px, mobile <768px). Add mobile navigation menu, adjust card grid to single column on mobile, ensure touch-friendly interactions, optimize font sizes across breakpoints.",
+      "assignee": "qwen",
+      "depends_on": ["T006", "T007", "T008"],
+      "expected_output": {
+        "files": [
+          "blog/src/styles/responsive.css",
+          "blog/src/components/MobileMenu.astro"
+        ],
+        "description": "Full responsive design with mobile menu and breakpoint optimizations"
+      }
+    },
+    {
+      "task_code": "T011",
+      "task_name": "Project Documentation",
+      "description": "Create README.md with local development setup instructions, how to add new articles, project structure explanation, technology stack overview, and customization guide. Include screenshots placeholder for future use.",
+      "assignee": "minimax",
+      "depends_on": ["T006", "T007", "T008", "T010"],
+      "expected_output": {
+        "files": [
+          "blog/README.md",
+          "blog/CONTRIBUTING.md"
+        ],
+        "description": "Comprehensive documentation for running and customizing the blog"
+      }
+    },
+    {
+      "task_code": "T012",
+      "task_name": "Final Integration and Testing",
+      "description": "Integrate all components, run build process to generate static output, test all pages locally, verify responsive design across breakpoints, check code syntax highlighting, ensure all links work correctly, fix any issues found.",
+      "assignee": "glm",
+      "depends_on": ["T006", "T007", "T008", "T009", "T010"],
+      "expected_output": {
+        "files": [
+          "blog/dist/",
+          "blog/test-report.md"
+        ],
+        "description": "Fully built and tested static site ready for deployment"
+      }
+    }
+  ],
+  "agent_capabilities": {
+    "kimi": {
+      "model": "claude-sonnet-4-5",
+      "strengths": ["CSS styling", "design implementation", "content creation"]
+    },
+    "glm": {
+      "model": "claude-opus-4-1",
+      "strengths": ["architecture", "complex configuration", "integration testing"]
+    },
+    "qwen": {
+      "model": "claude-3-7-sonnet-latest",
+      "strengths": ["component development", "page assembly", "responsive design"]
+    },
+    "minimax": {
+      "model": "claude-sonnet-4-5",
+      "strengths": ["animation effects", "documentation", "visual components"]
+    }
+  },
+  "milestones": [
+    {
+      "name": "Foundation Complete",
+      "tasks": ["T001", "T002"],
+      "description": "Project structure and design system ready"
+    },
+    {
+      "name": "Components Ready",
+      "tasks": ["T003", "T004", "T005"],
+      "description": "All UI components developed"
+    },
+    {
+      "name": "Pages Complete",
+      "tasks": ["T006", "T007", "T008"],
+      "description": "All pages implemented"
+    },
+    {
+      "name": "Project Delivery",
+      "tasks": ["T009", "T010", "T011", "T012"],
+      "description": "Content added, tested, and documented"
+    }
+  ],
+  "estimated_timeline": {
+    "T001": "1 session",
+    "T002": "1 session",
+    "T003": "1 session",
+    "T004": "1 session",
+    "T005": "1 session",
+    "T006": "1 session",
+    "T007": "1 session",
+    "T008": "1 session",
+    "T009": "1 session",
+    "T010": "1 session",
+    "T011": "1 session",
+    "T012": "1 session"
+  }
+}
