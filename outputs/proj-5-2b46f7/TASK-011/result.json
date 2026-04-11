@@ -1,0 +1,76 @@
+{
+  "task_code": "TASK-011",
+  "task_name": "前端 - 管理后台首页",
+  "summary": "创建了 /admin 管理后台页面，实现文章列表展示（表格+分页+统计）、需登录访问（未登录跳转 /login）、行内编辑/删除操作，以及管理端文章 API 客户端。",
+  "status": "completed",
+  "artifacts": [
+    "admin.astro",
+    "adminPostsApi.ts",
+    "test_adminPostsApi.ts",
+    "README.md"
+  ],
+  "pages": [
+    {
+      "path": "/admin",
+      "file": "admin.astro",
+      "description": "管理后台首页 - 文章列表，需登录访问"
+    }
+  ],
+  "modules": [
+    {
+      "file": "adminPostsApi.ts",
+      "description": "管理端文章 API 客户端",
+      "functions": [
+        "fetchAdminPosts(page, pageSize)",
+        "fetchAdminPostById(postId)",
+        "createAdminPost(input)",
+        "updateAdminPost(postId, input)",
+        "deleteAdminPost(postId)",
+        "requireAdminAuth()"
+      ]
+    }
+  ],
+  "features": [
+    "认证守卫 - 未登录自动跳转 /login",
+    "文章列表表格 - 标题/状态/分类/浏览量/创建时间",
+    "统计卡片 - 总文章数/已发布/草稿",
+    "分页控件",
+    "行内操作 - 编辑跳转 / 确认删除",
+    "用户名显示 / 登出按钮",
+    "科幻风格 UI 主题（复用 Layout 样式）"
+  ],
+  "integration": {
+    "task_005": {
+      "api_endpoint": "GET /api/posts?page=&page_size=",
+      "usage": "列表数据获取"
+    },
+    "task_006": {
+      "api_endpoints": [
+        "POST /api/posts",
+        "PUT /api/posts/{id}",
+        "DELETE /api/posts/{id}"
+      ],
+      "usage": "创建/更新/删除文章"
+    },
+    "task_009": {
+      "frontend_base": "Astro + Tailwind CSS",
+      "style_system": "科幻风格主题（复用 global.css 样式类）"
+    },
+    "task_010": {
+      "modules": [
+        "auth.ts - authFetch() 自动携带 Bearer token",
+        "authStore.ts - 认证状态订阅管理"
+      ]
+    }
+  },
+  "copy_commands": [
+    "cp admin.astro ../TASK-009/src/pages/admin.astro",
+    "cp adminPostsApi.ts ../TASK-009/src/utils/"
+  ],
+  "dependencies": [
+    "TASK-005: 公开文章列表 API",
+    "TASK-006: 管理文章 API + JWT 认证",
+    "TASK-009: Astro 前端基础 + Tailwind",
+    "TASK-010: 认证模块 (auth.ts, authStore.ts)"
+  ]
+}

@@ -1,0 +1,358 @@
+---
+/**
+ * 管理后台首页 - 文章列表
+ * 路径: /admin
+ * 任务码: TASK-011
+ * 需登录访问，未登录自动跳转至 /login
+ */
+import '../styles/global.css';
+
+const pageTitle = '管理后台 - SciFi Blog';
+---
+
+<!DOCTYPE html>
+<html lang="zh-CN" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{pageTitle}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style is:global>
+    .grid-background {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -100;
+      overflow: hidden;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-scifi-bg text-scifi-text antialiased flex flex-col">
+  <div class="grid-background"></div>
+
+  <!-- 管理后台导航栏 -->
+  <header class="sticky top-0 z-50 bg-scifi-bg/80 backdrop-blur-md border-b border-scifi-border/50">
+    <div class="container mx-auto px-4 py-4 max-w-6xl flex items-center justify-between">
+      <a href="/" class="flex items-center gap-2 group">
+        <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-scifi-primary to-scifi-secondary flex items-center justify-center pulse-glow">
+          <span class="text-white font-mono font-bold text-sm">&gt;_</span>
+        </div>
+        <span class="font-semibold text-scifi-text group-hover:text-scifi-primary transition-colors">
+          SciFi Admin
+        </span>
+      </a>
+      <div class="flex items-center gap-4">
+        <a href="/" class="font-mono text-sm text-scifi-muted hover:text-scifi-primary transition-colors">
+          返回前台
+        </a>
+        <span id="user-display" class="font-mono text-sm text-scifi-secondary hidden"></span>
+        <button
+          id="logout-btn"
+          class="font-mono text-sm px-4 py-2 rounded-lg border border-red-500/30 text-red-400 hover:bg-red-500/10 hover:border-red-500 transition-all hidden"
+        >
+          登出
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- 主内容 -->
+  <main class="flex-1 relative z-10 py-8">
+    <div class="container mx-auto px-4 max-w-6xl">
+      <!-- 页面标题与操作栏 -->
+      <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
+        <div>
+          <h1 class="text-2xl font-bold font-mono text-scifi-primary">文章管理</h1>
+          <p class="text-scifi-muted text-sm mt-1">管理和发布你的博客文章</p>
+        </div>
+        <a
+          href="/admin/posts/new"
+          id="create-btn"
+          class="font-mono text-sm px-6 py-2.5 rounded-lg bg-gradient-to-r from-scifi-primary to-scifi-secondary text-white hover:opacity-90 transition-opacity hidden"
+        >
+          + 新建文章
+        </a>
+      </div>
+
+      <!-- 加载状态 -->
+      <div id="loading" class="text-center py-16">
+        <div class="inline-block animate-spin rounded-full h-8 w-8 border-2 border-scifi-primary border-t-transparent"></div>
+        <p class="text-scifi-muted text-sm mt-4 font-mono">加载中...</p>
+      </div>
+
+      <!-- 统计卡片 -->
+      <div id="stats" class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8 hidden">
+        <div class="bg-scifi-card/50 backdrop-blur-sm border border-scifi-border rounded-xl p-4">
+          <div class="text-2xl font-bold font-mono text-scifi-primary" id="stat-total">0</div>
+          <div class="text-scifi-muted text-sm font-mono mt-1">总文章</div>
+        </div>
+        <div class="bg-scifi-card/50 backdrop-blur-sm border border-scifi-border rounded-xl p-4">
+          <div class="text-2xl font-bold font-mono text-neon-green" id="stat-published">0</div>
+          <div class="text-scifi-muted text-sm font-mono mt-1">已发布</div>
+        </div>
+        <div class="bg-scifi-card/50 backdrop-blur-sm border border-scifi-border rounded-xl p-4">
+          <div class="text-2xl font-bold font-mono text-scifi-accent" id="stat-drafts">0</div>
+          <div class="text-scifi-muted text-sm font-mono mt-1">草稿</div>
+        </div>
+      </div>
+
+      <!-- 文章表格 -->
+      <div id="posts-table" class="bg-scifi-card/50 backdrop-blur-sm border border-scifi-border rounded-xl overflow-hidden hidden">
+        <div class="overflow-x-auto">
+          <table class="w-full">
+            <thead class="border-b border-scifi-border/50 bg-scifi-card/30">
+              <tr>
+                <th class="text-left px-6 py-4 font-mono text-xs text-scifi-muted uppercase tracking-wider">标题</th>
+                <th class="text-left px-6 py-4 font-mono text-xs text-scifi-muted uppercase tracking-wider">状态</th>
+                <th class="text-left px-6 py-4 font-mono text-xs text-scifi-muted uppercase tracking-wider">分类</th>
+                <th class="text-left px-6 py-4 font-mono text-xs text-scifi-muted uppercase tracking-wider">浏览</th>
+                <th class="text-left px-6 py-4 font-mono text-xs text-scifi-muted uppercase tracking-wider">创建时间</th>
+                <th class="text-right px-6 py-4 font-mono text-xs text-scifi-muted uppercase tracking-wider">操作</th>
+              </tr>
+            </thead>
+            <tbody id="posts-tbody" class="divide-y divide-scifi-border/30">
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 分页 -->
+      <div id="pagination" class="flex items-center justify-center gap-2 mt-6 hidden">
+        <button id="prev-page" class="font-mono text-sm px-4 py-2 rounded-lg border border-scifi-border text-scifi-muted hover:border-scifi-primary hover:text-scifi-primary transition-all disabled:opacity-30 disabled:cursor-not-allowed" disabled>
+          &larr; 上一页
+        </button>
+        <span id="page-info" class="font-mono text-sm text-scifi-muted px-4"></span>
+        <button id="next-page" class="font-mono text-sm px-4 py-2 rounded-lg border border-scifi-border text-scifi-muted hover:border-scifi-primary hover:text-scifi-primary transition-all disabled:opacity-30 disabled:cursor-not-allowed" disabled>
+          下一页 &rarr;
+        </button>
+      </div>
+
+      <!-- 空状态 -->
+      <div id="empty-state" class="text-center py-16 hidden">
+        <div class="text-6xl mb-4">📝</div>
+        <p class="text-scifi-muted font-mono">还没有文章</p>
+        <a href="/admin/posts/new" class="inline-block mt-4 font-mono text-sm px-6 py-2.5 rounded-lg bg-gradient-to-r from-scifi-primary to-scifi-secondary text-white hover:opacity-90 transition-opacity">
+          创建第一篇文章
+        </a>
+      </div>
+
+      <!-- 错误状态 -->
+      <div id="error-state" class="text-center py-16 hidden">
+        <p class="text-red-400 font-mono" id="error-message"></p>
+        <button id="retry-btn" class="mt-4 font-mono text-sm px-6 py-2.5 rounded-lg border border-scifi-border text-scifi-muted hover:border-scifi-primary hover:text-scifi-primary transition-all">
+          重试
+        </button>
+      </div>
+    </div>
+  </main>
+
+  <!-- 页脚 -->
+  <footer class="relative z-10 mt-auto border-t border-scifi-border/30 bg-scifi-card/50 backdrop-blur-sm">
+    <div class="container mx-auto px-4 py-4 max-w-6xl">
+      <p class="text-scifi-muted text-xs font-mono text-center">
+        &copy; 2025 SciFi Admin. Management Console.
+      </p>
+    </div>
+  </footer>
+</body>
+</html>
+
+<script>
+import { authStore } from './utils/authStore';
+import { fetchAdminPosts, deleteAdminPost } from './utils/adminPostsApi';
+
+// ============== 状态 ==============
+let currentPage = 1;
+let totalPages = 1;
+let totalPosts = 0;
+
+// ============== DOM 元素 ==============
+const loadingEl = document.getElementById('loading');
+const statsEl = document.getElementById('stats');
+const postsTableEl = document.getElementById('posts-table');
+const postsTbody = document.getElementById('posts-tbody');
+const paginationEl = document.getElementById('pagination');
+const emptyState = document.getElementById('empty-state');
+const errorState = document.getElementById('error-state');
+const errorMessage = document.getElementById('error-message');
+const userDisplay = document.getElementById('user-display');
+const logoutBtn = document.getElementById('logout-btn');
+const createBtn = document.getElementById('create-btn');
+const prevPageBtn = document.getElementById('prev-page');
+const nextPageBtn = document.getElementById('next-page');
+const pageInfo = document.getElementById('page-info');
+
+// ============== 认证守卫 ==============
+const state = authStore.getState();
+if (!state.isAuthenticated) {
+  // 未登录，跳转到登录页，携带当前路径作为 redirect
+  window.location.href = `/login?redirect=${encodeURIComponent(window.location.pathname)}`;
+} else {
+  // 已登录，显示用户信息
+  if (state.user) {
+    userDisplay.textContent = state.user.nickname || state.user.username;
+    userDisplay.classList.remove('hidden');
+  }
+  logoutBtn.classList.remove('hidden');
+  createBtn.classList.remove('hidden');
+}
+
+// ============== 登出 ==============
+logoutBtn.addEventListener('click', async () => {
+  await authStore.logout();
+  window.location.href = '/login';
+});
+
+// ============== 加载文章列表 ==============
+async function loadPosts(page: number = 1) {
+  showLoading();
+
+  try {
+    const data = await fetchAdminPosts(page, 20);
+    currentPage = data.page;
+    totalPages = data.total_pages;
+    totalPosts = data.total;
+
+    hideAll();
+
+    if (data.items.length === 0) {
+      emptyState.classList.remove('hidden');
+      return;
+    }
+
+    renderStats(data.items);
+    renderTable(data.items);
+    renderPagination();
+
+    statsEl.classList.remove('hidden');
+    postsTableEl.classList.remove('hidden');
+
+    if (totalPages > 1) {
+      paginationEl.classList.remove('hidden');
+    }
+  } catch (error) {
+    hideAll();
+    const msg = error instanceof Error ? error.message : '加载失败';
+    errorMessage.textContent = msg;
+    errorState.classList.remove('hidden');
+
+    // 如果是 401，跳转登录
+    if (msg.includes('401')) {
+      window.location.href = `/login?redirect=${encodeURIComponent(window.location.pathname)}`;
+    }
+  }
+}
+
+// ============== 渲染统计 ==============
+function renderStats(items: any[]) {
+  document.getElementById('stat-total')!.textContent = String(totalPosts);
+  const published = items.filter(i => i.is_published).length;
+  document.getElementById('stat-published')!.textContent = String(published);
+  document.getElementById('stat-drafts')!.textContent = String(totalPosts - published);
+}
+
+// ============== 渲染表格 ==============
+function renderTable(items: any[]) {
+  postsTbody.innerHTML = items.map(post => {
+    const statusBadge = post.is_published
+      ? '<span class="inline-flex items-center px-2 py-1 text-xs font-mono rounded bg-neon-green/10 text-neon-green border border-neon-green/20">已发布</span>'
+      : '<span class="inline-flex items-center px-2 py-1 text-xs font-mono rounded bg-scifi-accent/10 text-scifi-accent border border-scifi-accent/20">草稿</span>';
+
+    const category = post.category
+      ? `<span class="text-scifi-secondary text-sm">${post.category.name}</span>`
+      : '<span class="text-scifi-muted text-sm">-</span>';
+
+    const createdAt = new Date(post.created_at).toLocaleDateString('zh-CN');
+
+    return `
+      <tr class="hover:bg-scifi-primary/5 transition-colors">
+        <td class="px-6 py-4">
+          <div class="font-medium text-scifi-text">${escapeHtml(post.title)}</div>
+          <div class="text-xs text-scifi-muted font-mono mt-1">/${post.slug}</div>
+        </td>
+        <td class="px-6 py-4">${statusBadge}</td>
+        <td class="px-6 py-4">${category}</td>
+        <td class="px-6 py-4 font-mono text-sm text-scifi-muted">${post.view_count}</td>
+        <td class="px-6 py-4 font-mono text-sm text-scifi-muted">${createdAt}</td>
+        <td class="px-6 py-4 text-right">
+          <a href="/admin/posts/edit/${post.id}" class="text-scifi-primary hover:text-scifi-primary/80 text-sm font-mono mr-4">编辑</a>
+          <button class="text-red-400 hover:text-red-300 text-sm font-mono delete-btn" data-id="${post.id}" data-title="${escapeHtml(post.title)}">
+            删除
+          </button>
+        </td>
+      </tr>
+    `;
+  }).join('');
+
+  // 绑定删除按钮事件
+  postsTbody.querySelectorAll('.delete-btn').forEach(btn => {
+    btn.addEventListener('click', handleDelete);
+  });
+}
+
+// ============== 渲染分页 ==============
+function renderPagination() {
+  pageInfo.textContent = `第 ${currentPage} / ${totalPages} 页`;
+  prevPageBtn.disabled = currentPage <= 1;
+  nextPageBtn.disabled = currentPage >= totalPages;
+}
+
+// ============== 删除文章 ==============
+async function handleDelete(e: Event) {
+  const btn = e.target as HTMLButtonElement;
+  const postId = parseInt(btn.dataset.id);
+  const title = btn.dataset.title;
+
+  if (!confirm(`确定删除文章 "${title}" 吗？此操作不可撤销。`)) {
+    return;
+  }
+
+  try {
+    await deleteAdminPost(postId);
+    // 重新加载当前页
+    loadPosts(currentPage);
+  } catch (error) {
+    alert(error instanceof Error ? error.message : '删除失败');
+  }
+}
+
+// ============== 分页控制 ==============
+prevPageBtn.addEventListener('click', () => {
+  if (currentPage > 1) loadPosts(currentPage - 1);
+});
+
+nextPageBtn.addEventListener('click', () => {
+  if (currentPage < totalPages) loadPosts(currentPage + 1);
+});
+
+// ============== 重试 ==============
+document.getElementById('retry-btn')!.addEventListener('click', () => {
+  loadPosts(currentPage);
+});
+
+// ============== 工具函数 ==============
+function hideAll() {
+  [loadingEl, statsEl, postsTableEl, paginationEl, emptyState, errorState].forEach(el => {
+    el.classList.add('hidden');
+  });
+}
+
+function showLoading() {
+  hideAll();
+  loadingEl.classList.remove('hidden');
+}
+
+function escapeHtml(str: string): string {
+  return str.replace(/[&<>"']/g, m => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+  })[m] || m);
+}
+
+// ============== 初始加载 ==============
+loadPosts(1);
+</script>
