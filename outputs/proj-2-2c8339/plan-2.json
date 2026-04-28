@@ -1,0 +1,77 @@
+{
+  "plan_name": "个人博客页面（Trae 风格）交付计划",
+  "tasks": [
+    {
+      "task_code": "P2-001",
+      "task_name": "需求拆解与视觉规范对齐",
+      "description": "梳理页面信息架构（Navbar/Hero/精选卡片/About/Footer）、深色主题与冷色渐变的使用边界；定义字号层级、间距栅格、按钮样式、卡片样式、动效基线（hover/scroll）与响应式断点策略，并产出可直接落地到单文件 HTML 的样式约定。",
+      "assignee": "Codex Pro (gpt-5.5)",
+      "depends_on": [],
+      "expected_output": "一份可执行的样式/组件规范（写入注释与 CSS 变量策略），明确：颜色/渐变/阴影/边框/排版/断点/交互。"
+    },
+    {
+      "task_code": "P2-002",
+      "task_name": "实现基础单页骨架与全局样式",
+      "description": "在 outputs/proj-2-2c8339 目录下生成独立 index.html：引入无衬线字体（优先系统字体栈）、设置深色背景、全局排版与容器宽度；实现平滑滚动（CSS + 可选 JS）与基础动效（prefers-reduced-motion 兼容）。",
+      "assignee": "Codex Pro (gpt-5.5)",
+      "depends_on": ["P2-001"],
+      "expected_output": "outputs/proj-2-2c8339/index.html（含可维护的 CSS 变量、基础布局、动效基线、注释齐全）。"
+    },
+    {
+      "task_code": "P2-003",
+      "task_name": "实现 Navbar（固定顶部 + 汉堡菜单）",
+      "description": "实现固定顶部导航：Logo 文本“我的博客”+ 导航链接（首页/文章/关于我/联系）；移动端收纳为汉堡菜单（无框架、无依赖），支持展开/收起、点击菜单项自动关闭、ESC 关闭与 aria 属性（可访问性）。",
+      "assignee": "Codex Pro (gpt-5.5)",
+      "depends_on": ["P2-002"],
+      "expected_output": "index.html 中完成 Navbar + 响应式菜单交互（含可访问性与键盘操作）。"
+    },
+    {
+      "task_code": "P2-004",
+      "task_name": "实现 Hero（大标题 + 渐变 CTA）",
+      "description": "实现主视觉区：巨型标题（渐变文字）、简短个人定位描述；实现 1-2 个渐变 CTA 按钮（阅读文章/了解更多），包含 hover 微交互（轻微位移、光晕、渐变流动或高光），并保证移动端排版不拥挤。",
+      "assignee": "Codex Pro (gpt-5.5)",
+      "depends_on": ["P2-002", "P2-003"],
+      "expected_output": "index.html 中完成 Hero 视觉与 CTA 动效，整体观感高度贴近 trae.ai 的暗色未来科技风。"
+    },
+    {
+      "task_code": "P2-005",
+      "task_name": "实现精选文章/项目卡片网格（3-6 项）",
+      "description": "使用卡片网格布局展示精选内容：标题、摘要、发布日期、“阅读更多”链接/按钮；卡片具备边框/玻璃拟态/微弱渐变描边与 hover 提升（阴影、上浮、边框发光）。移动端自动改为单列或双列，并保持信息层级清晰。",
+      "assignee": "Codex Pro (gpt-5.5)",
+      "depends_on": ["P2-002", "P2-004"],
+      "expected_output": "index.html 中完成 Featured 区块与卡片组件，含占位数据与可扩展结构。"
+    },
+    {
+      "task_code": "P2-006",
+      "task_name": "实现 About Me（头像占位 + 口语化简介）",
+      "description": "实现关于我板块：圆形头像占位（CSS 或内联 SVG 渐变占位图）、简洁口语化介绍；布局在桌面端左右分栏、移动端上下堆叠；加入轻微背景渐变或分隔线以增强层次。",
+      "assignee": "Codex Pro (gpt-5.5)",
+      "depends_on": ["P2-002", "P2-005"],
+      "expected_output": "index.html 中完成 About 区块，内容可直接替换为真实头像与文案。"
+    },
+    {
+      "task_code": "P2-007",
+      "task_name": "实现 Footer（版权 + 社交图标）",
+      "description": "实现页脚：版权信息、社交媒体图标链接（使用 Font Awesome CDN 或轻量内联 SVG 图标，确保离线可选方案）；图标 hover 状态与可访问性（aria-label）。",
+      "assignee": "Codex Pro (gpt-5.5)",
+      "depends_on": ["P2-006"],
+      "expected_output": "index.html 中完成 Footer（图标、链接、动效与可访问性）。"
+    },
+    {
+      "task_code": "P2-008",
+      "task_name": "端到端响应式与体验验收",
+      "description": "在常见断点下检查：桌面/平板/手机；验证汉堡菜单、平滑滚动、锚点偏移（避免被固定导航遮挡）、按钮/卡片 hover、对比度与可读性；补齐注释与代码结构（模块化分区注释）。",
+      "assignee": "Codex Pro (gpt-5.5)",
+      "depends_on": ["P2-007"],
+      "expected_output": "最终可直接双击打开预览的 index.html，移动端与桌面端均“完美适配”，交互完整且代码可维护。"
+    },
+    {
+      "task_code": "P2-009",
+      "task_name": "提交并同步到远程仓库",
+      "description": "执行 git add / git commit / git push，将 outputs/proj-2-2c8339 下的交付物同步到远程仓库；如遇到权限或文件系统限制，记录失败原因与可复现命令，并给出替代同步方案（由具备写权限的环境执行）。",
+      "assignee": "Codex Pro (gpt-5.5)",
+      "depends_on": ["P2-008"],
+      "expected_output": "若环境允许：远程仓库包含最新提交；若环境不允许：输出明确错误（当前已遇到 .git/index.lock 无法创建：Read-only file system），并提供可在本地复现的命令序列。"
+    }
+  ]
+}
