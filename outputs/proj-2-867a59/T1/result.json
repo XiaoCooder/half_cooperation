@@ -1,0 +1,25 @@
+{
+  "task_code": "T1",
+  "summary": "完成个人博客首页的视觉基调与内容结构定义，明确 Trae 式极简页面的信息层级、Hero 文案方向、导航结构、文章卡片字段、页脚社交链接和响应式/交互约束。本任务未修改项目业务代码。",
+  "no_code_changes": true,
+  "verification_basis": [
+    "任务开始前已执行 git pull，返回 Already up to date.",
+    "执行前 git status --short 为空，仓库无未提交变更。",
+    "本任务产物仅位于 outputs/proj-2-867a59/T1/ 协作目录。",
+    "T1 为视觉与内容结构定义任务，不涉及项目代码仓库业务文件修改。"
+  ],
+  "artifacts": [
+    {
+      "path": "outputs/proj-2-867a59/T1/design-brief.md",
+      "description": "首页定位、信息层级、视觉基调、排版间距、文章卡片规范、响应式要求和交互约束。"
+    },
+    {
+      "path": "outputs/proj-2-867a59/T1/content-structure.json",
+      "description": "可供后续实现任务读取的结构化首页内容、文章示例和视觉约束。"
+    },
+    {
+      "path": "outputs/proj-2-867a59/T1/usage.json",
+      "description": "本任务执行动作、无代码改动说明和基础验证记录。"
+    }
+  ]
+}

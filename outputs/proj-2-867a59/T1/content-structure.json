@@ -1,0 +1,96 @@
+{
+  "task_code": "T1",
+  "no_code_changes": true,
+  "homepage": {
+    "navigation": {
+      "brand": "XiaoCooder",
+      "links": [
+        {
+          "label": "首页",
+          "href": "#home"
+        },
+        {
+          "label": "关于",
+          "href": "#about"
+        },
+        {
+          "label": "项目",
+          "href": "#projects"
+        }
+      ],
+      "style": "transparent or translucent glass header, minimal text links"
+    },
+    "hero": {
+      "eyebrow": "Frontend Developer · AI Explorer",
+      "headline_primary": "智能无限，创作无间",
+      "headline_alternatives": [
+        "专注构建，持续探索",
+        "把想法写成系统"
+      ],
+      "summary": "前端开发者 / AI 探索者，关注高性能界面、工程效率与智能协作体验。",
+      "supporting_copy": "这里记录我对产品、代码和 AI 工作流的长期观察，也沉淀那些能被复用的工程经验。",
+      "primary_action": {
+        "label": "阅读文章",
+        "href": "#articles"
+      },
+      "secondary_action": {
+        "label": "查看项目",
+        "href": "#projects"
+      }
+    },
+    "articles": [
+      {
+        "title": "把 AI 融入前端工作流",
+        "description": "从需求拆解、组件实现到代码审查，记录 AI 协作真正提升效率的环节。",
+        "reading_time": "6 min read"
+      },
+      {
+        "title": "极简界面的信息密度",
+        "description": "好的留白不是减少内容，而是让每个信息块拥有明确的阅读优先级。",
+        "reading_time": "4 min read"
+      },
+      {
+        "title": "一次高性能首页的构建笔记",
+        "description": "围绕首屏渲染、样式组织和交互反馈，复盘一个轻量页面的实现取舍。",
+        "reading_time": "8 min read"
+      },
+      {
+        "title": "从个人项目到可维护系统",
+        "description": "当项目持续增长时，如何让目录、组件和数据结构仍然保持清晰。",
+        "reading_time": "5 min read"
+      }
+    ],
+    "footer": {
+      "copyright": "© 2026 XiaoCooder",
+      "links": [
+        "GitHub",
+        "Email",
+        "RSS"
+      ]
+    }
+  },
+  "visual_constraints": {
+    "style_keywords": [
+      "minimal",
+      "content-first",
+      "large typography",
+      "wide whitespace",
+      "restrained hover",
+      "modular cards"
+    ],
+    "preferred_theme": "light minimal background with dark text",
+    "avoid": [
+      "personal photo as hero focus",
+      "decorative gradient blobs",
+      "heavy borders",
+      "large marketing illustration",
+      "overly animated interactions",
+      "dense card grids"
+    ],
+    "responsive": {
+      "desktop": "2-3 column article grid, hero headline as primary focus",
+      "tablet": "reduced headline size, 2 column cards when space allows",
+      "mobile": "single column layout, natural headline wrapping, compact nav"
+    }
+  }
+}
