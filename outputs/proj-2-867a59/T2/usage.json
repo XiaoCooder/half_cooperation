@@ -1,7 +1,7 @@
 {
   "task_code": "T2",
   "agent": "codex-pro",
-  "result_status": "coding_completed",
+  "result_status": "testing_completed",
   "no_code_changes": false,
   "actions": [
     "executed git pull before work",
@@ -9,16 +9,20 @@
     "read T1 content-structure.json",
     "implemented static homepage in index.html and style.css",
     "performed lightweight structural verification",
-    "committed and pushed code before creating result.json"
+    "committed and pushed code before creating result.json",
+    "added automated homepage tests for attempt-1",
+    "ran python3 -m unittest outputs/proj-2-867a59/T2/test_homepage.py",
+    "created testing report for attempt-1"
   ],
   "code_commit": {
-    "hash": "0ed43d0",
-    "message": "Implement personal blog homepage"
+    "hash": "8f3e835",
+    "message": "Add homepage implementation tests"
   },
   "verification": {
     "git_pull": "Already up to date.",
     "predecessor_result": "outputs/proj-2-867a59/T1/result.json exists",
     "structural_check": "rg found site-header, hero-section, article-card, site-footer and @media in T2 implementation",
+    "automated_tests": "python3 -m unittest outputs/proj-2-867a59/T2/test_homepage.py passed: Ran 5 tests in 0.003s, OK",
     "build_check": "not run; repository has no root package.json and this T2 implementation is plain static HTML/CSS"
   }
 }

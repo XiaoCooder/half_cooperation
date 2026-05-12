@@ -1,39 +1,41 @@
 {
   "task_code": "T2",
-  "result_status": "coding_completed",
-  "summary": "完成个人博客首页前端编码：新增静态 HTML/CSS 首页，实现半透明导航、Trae 式大标题 Hero、个人身份介绍、4 篇文章摘要卡片、关于/项目区、极简页脚、克制 hover 反馈和响应式布局。代码文件已在生成 result.json 前提交并推送。",
+  "result_status": "testing_completed",
+  "summary": "T2 首页前端实现 attempt-1 测试通过。已新增并执行 Python 标准库自动化测试，覆盖页面地标结构、导航锚点、Hero 文案、文章卡片字段、毛玻璃导航、hover 反馈和响应式 CSS。测试代码已提交并推送。",
   "no_code_changes": false,
-  "code_commit": {
-    "hash": "0ed43d0",
-    "message": "Implement personal blog homepage"
-  },
-  "changed_files": [
-    "outputs/proj-2-867a59/T2/index.html",
-    "outputs/proj-2-867a59/T2/style.css"
+  "code_commits": [
+    {
+      "hash": "0ed43d0",
+      "message": "Implement personal blog homepage"
+    },
+    {
+      "hash": "8f3e835",
+      "message": "Add homepage implementation tests"
+    }
   ],
-  "verification_basis": [
-    "任务开始前已执行 git pull，返回 Already up to date.",
-    "已确认前序任务目录 outputs/proj-2-867a59/T1/ 及 result.json 存在。",
-    "通过 rg 检查实现包含 site-header、hero-section、article-card、site-footer 和 @media 响应式断点。",
-    "本仓库无根 package.json，T2 实现为静态 HTML/CSS，编码阶段未运行构建脚本。",
-    "代码提交 0ed43d0 已成功 push 到远端后，才生成本 result.json。"
-  ],
+  "test_command": "python3 -m unittest outputs/proj-2-867a59/T2/test_homepage.py",
+  "test_result": "passed: Ran 5 tests in 0.003s, OK",
+  "build_or_start": "not run; repository has no root package.json and T2 implementation is plain static HTML/CSS",
   "artifacts": [
     {
       "path": "outputs/proj-2-867a59/T2/index.html",
-      "description": "个人博客主页静态结构，包含导航、Hero、文章列表、关于/项目区和页脚。"
+      "description": "个人博客主页静态结构。"
     },
     {
       "path": "outputs/proj-2-867a59/T2/style.css",
-      "description": "Trae 风格极简视觉样式、卡片 hover 反馈和响应式布局。"
+      "description": "极简视觉样式、hover 反馈和响应式布局。"
     },
     {
-      "path": "outputs/proj-2-867a59/T2/implementation-report.md",
-      "description": "编码变更说明、关键文件和验证依据。"
+      "path": "outputs/proj-2-867a59/T2/test_homepage.py",
+      "description": "attempt-1 新增自动化测试。"
+    },
+    {
+      "path": "outputs/proj-2-867a59/T2/test-reports/attempt-1.md",
+      "description": "测试报告，包含前置检查、测试覆盖、执行命令和结果。"
     },
     {
       "path": "outputs/proj-2-867a59/T2/usage.json",
-      "description": "任务执行记录、提交信息和验证摘要。"
+      "description": "测试阶段执行记录和验证摘要。"
     }
   ]
 }
