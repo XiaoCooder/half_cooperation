@@ -1,0 +1,59 @@
+{
+  "plan_name": "个人博客页面 Trae 风格首页交付计划",
+  "tasks": [
+    {
+      "task_code": "T1",
+      "task_name": "视觉基调与内容结构定义",
+      "description": "梳理个人博客首页的信息层级、Trae 式极简视觉语言、Hero 文案方向、导航结构、文章卡片字段和页脚社交链接呈现方式；输出可直接指导实现的页面结构与设计约束，避免过度装饰和营销化布局。",
+      "assignee": "claude-max",
+      "depends_on": [],
+      "expected_output": "首页结构说明、核心文案草案、视觉约束清单、桌面与移动端布局要点。",
+      "requires_test_loop": false
+    },
+    {
+      "task_code": "T2",
+      "task_name": "首页前端实现",
+      "description": "基于 T1 的结构与视觉约束，在项目代码仓库实现个人博客主页：透明或半透明顶部导航、首屏大标题与身份介绍、3-5 篇文章摘要卡片、极简页脚、克制 hover 反馈和完整响应式布局。实现时优先复用项目既有技术栈和样式组织方式。",
+      "assignee": "codex-pro",
+      "depends_on": [
+        "T1"
+      ],
+      "expected_output": "完成可运行的首页代码与样式变更，页面在桌面、平板和移动端均保持良好排版与阅读体验。",
+      "requires_test_loop": true
+    },
+    {
+      "task_code": "T3",
+      "task_name": "本地构建与体验验证",
+      "description": "在同服务器环境执行项目安装、构建或开发服务验证，检查首页是否能正常加载；重点验证响应式断点、文本不溢出、卡片 hover 效果克制、页面无明显布局错位，并记录必要的修复项。该任务需要本地文件读写和构建验证，分配给同服务器 Agent。",
+      "assignee": "codex-pro",
+      "depends_on": [
+        "T2"
+      ],
+      "expected_output": "构建或运行验证结果、关键视口检查记录、发现问题的修复说明。",
+      "requires_test_loop": false
+    },
+    {
+      "task_code": "T4",
+      "task_name": "代码审查与质量把关",
+      "description": "审查首页实现是否符合任务目标和 Trae 式极简设计方向，重点关注不必要复杂度、响应式可靠性、可维护性、性能风险、无障碍基础语义和是否存在与项目既有模式冲突的问题。",
+      "assignee": "claude-max",
+      "depends_on": [
+        "T2",
+        "T3"
+      ],
+      "expected_output": "按严重程度排序的审查意见；若无阻塞问题，给出可合并结论和剩余风险。",
+      "requires_test_loop": false
+    },
+    {
+      "task_code": "T5",
+      "task_name": "交付汇总与协作产物同步",
+      "description": "汇总实现内容、验证结果和审查结论，将 result.json、usage.json 等必要协作产物写入 outputs/proj-2-867a59，并在项目代码仓库完成最终提交与推送。该任务涉及本地仓库文件写入和 git 操作，分配给同服务器 Agent。",
+      "assignee": "codex-pro",
+      "depends_on": [
+        "T4"
+      ],
+      "expected_output": "协作目录产物完整，项目代码和 HALF 协作仓库均完成必要提交与推送。",
+      "requires_test_loop": false
+    }
+  ]
+}
