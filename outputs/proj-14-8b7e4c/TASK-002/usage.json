@@ -1,0 +1,19 @@
+{
+  "task_code": "TASK-002",
+  "round_id": "round-001",
+  "commands": [
+    "git -C /home/usr/blog-test pull",
+    "git -C /home/usr/half_cooperation pull",
+    "git -C /home/usr/blog-test switch -c issue-1-personal-homepage-20260518",
+    "python3 -m unittest discover -s /home/usr/blog-test/tests",
+    "git -C /home/usr/blog-test push -u origin issue-1-personal-homepage-20260518",
+    "git -C /home/usr/half_cooperation pull"
+  ],
+  "artifacts": [
+    "outputs/proj-14-8b7e4c/TASK-002/rounds/round-001/branch.json",
+    "outputs/proj-14-8b7e4c/TASK-002/rounds/round-001/implementation-summary.md",
+    "outputs/proj-14-8b7e4c/TASK-002/rounds/round-001/test-report.md",
+    "outputs/proj-14-8b7e4c/TASK-002/usage.json",
+    "outputs/proj-14-8b7e4c/flow-state.json"
+  ]
+}
