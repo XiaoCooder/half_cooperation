@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta
+      name="description"
+      content="林砚的个人主页，展示近期文章、精选项目和社交链接。"
+    >
+    <title>林砚 | 个人主页</title>
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <main class="page-shell" aria-label="个人主页">
+      <aside class="profile-panel" aria-labelledby="profile-name">
+        <img
+          class="avatar"
+          src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=480&q=80"
+          alt="林砚的个人头像"
+          width="160"
+          height="160"
+        >
+        <p class="eyebrow">Personal Blog</p>
+        <h1 id="profile-name">林砚</h1>
+        <p class="tagline">前端开发者 / 摄影爱好者</p>
+        <p class="intro">
+          关注可读的界面、轻量工具和城市影像，记录产品设计与工程实践中的细节。
+        </p>
+        <nav class="social-links" aria-label="社交链接">
+          <a href="https://github.com/" aria-label="GitHub">
+            <span aria-hidden="true">GH</span>
+          </a>
+          <a href="https://www.zhihu.com/" aria-label="知乎">
+            <span aria-hidden="true">知</span>
+          </a>
+          <a href="mailto:hello@example.com" aria-label="邮箱">
+            <span aria-hidden="true">@</span>
+          </a>
+        </nav>
+      </aside>
+
+      <section class="content-panel" aria-label="精选内容">
+        <div class="section-header">
+          <p class="eyebrow">Recent Notes</p>
+          <h2>近期动态</h2>
+        </div>
+
+        <div class="updates-list">
+          <article class="update-card">
+            <time datetime="2026-05-18">2026.05.18</time>
+            <h3>把博客首页压缩进一个屏幕</h3>
+            <p>梳理个人介绍、文章入口和外部链接的优先级，让访客在第一眼获得完整上下文。</p>
+          </article>
+          <article class="update-card">
+            <time datetime="2026-05-11">2026.05.11</time>
+            <h3>设计系统里的留白尺度</h3>
+            <p>记录如何用更稳定的间距和字号层级，让内容型页面保持克制和易读。</p>
+          </article>
+          <article class="update-card">
+            <time datetime="2026-04-29">2026.04.29</time>
+            <h3>一次静态页面性能清理</h3>
+            <p>从图片尺寸、字体加载和 CSS 选择器入手，减少首屏渲染时的无效开销。</p>
+          </article>
+          <article class="update-card">
+            <time datetime="2026-04-16">2026.04.16</time>
+            <h3>周末街拍的色彩备忘</h3>
+            <p>整理黄昏光线下的取景经验，并把它们转化为更自然的网页配色参考。</p>
+          </article>
+        </div>
+
+        <div class="section-header projects-header">
+          <p class="eyebrow">Selected Work</p>
+          <h2>精选项目</h2>
+        </div>
+
+        <div class="projects-grid">
+          <article class="project-card">
+            <h3>Notion Flow</h3>
+            <p>面向个人知识库的轻量整理工具，强调低打扰输入和清晰的回顾路径。</p>
+          </article>
+          <article class="project-card">
+            <h3>Street Tone</h3>
+            <p>用照片色板生成网页配色建议，帮助内容页快速建立真实的视觉气质。</p>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p>© 2026 林砚. 保留所有权利。</p>
+    </footer>
+  </body>
+</html>
