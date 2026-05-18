@@ -1,0 +1,27 @@
+{
+  "task_code": "TASK-005",
+  "round": 1,
+  "round_id": "round-001",
+  "work_branch": "issue-1-personal-homepage-20260518",
+  "head_commit": "d6cc78cbad7167376e4d54d3a35ca88818380ae3",
+  "approve_merge": false,
+  "decision": "needs_fix",
+  "summary": "两份 review 都没有通过合并。核心问题一致：社交链接区未按需求使用图标，且测试未覆盖社交图标这一明确需求。",
+  "reviews": [
+    {
+      "task_code": "TASK-003",
+      "approve_merge": false,
+      "decision": "needs_small_changes",
+      "summary": "实现基本满足极简单页个人主页、近期动态、精选项目、响应式布局和悬停微交互要求；但社交链接区域未按需求提供图标，只是文字按钮，建议补齐后再合并。"
+    },
+    {
+      "task_code": "TASK-004",
+      "approve_merge": false,
+      "conclusion": "需要小修改后再合并",
+      "summary": "本轮实现以纯静态页面完成了个人信息、近期动态、精选项目、页脚、响应式布局和悬停微交互，现有 unittest 与 diff 空白检查均通过；但社交链接未按 issue 要求实现为图标链接，测试也未覆盖该要求，因此建议补齐后再合并。"
+    }
+  ],
+  "next_action": "return_to_TASK-002_for_fix",
+  "max_review_rounds_reached": false,
+  "pr_created": false
+}
