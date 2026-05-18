@@ -1,0 +1,77 @@
+{
+  "flow_type": "issue_code_review_loop",
+  "project_name": "个人博客页面S",
+  "project_task_intro": "AAA",
+  "repo": {
+    "project_code_repo": "https://github.com/XiaoCooder/half_cooperation.git",
+    "half_collaboration_repo": "https://github.com/XiaoCooder/half_cooperation.git",
+    "base_branch": "main",
+    "work_branch": "add-blog",
+    "collaboration_dir": "outputs/proj-4-81fa3c"
+  },
+  "issue": {
+    "url": "https://github.com/XiaoCooder/half_cooperation/issues/1",
+    "number": 1,
+    "title": "新建个人博客页面",
+    "state": "open",
+    "fetched_at": "2026-05-18T00:00:00+08:00",
+    "summary_artifact": "outputs/proj-4-81fa3c/TASK-001/issue-summary.md"
+  },
+  "review": {
+    "max_rounds": 3,
+    "prompt_template": "通用 PR Review Prompt 模板",
+    "review_prompt_source": "task input"
+  },
+  "current_round": 1,
+  "current_round_dir": "outputs/proj-4-81fa3c/round-001",
+  "rounds": [
+    {
+      "round": 1,
+      "round_dir": "outputs/proj-4-81fa3c/round-001",
+      "status": "coding_unlocked",
+      "branch_artifact": "outputs/proj-4-81fa3c/round-001/branch.json",
+      "review_artifact": "outputs/proj-4-81fa3c/round-001/review.json",
+      "decision_artifact": "outputs/proj-4-81fa3c/round-001/decision.json"
+    }
+  ],
+  "tasks": {
+    "TASK-001": {
+      "name": "拉取 issue 并初始化评审循环状态",
+      "status": "completed",
+      "artifacts": [
+        "outputs/proj-4-81fa3c/TASK-001/issue-summary.md",
+        "outputs/proj-4-81fa3c/TASK-001/implementation-plan.md",
+        "outputs/proj-4-81fa3c/flow-state.json"
+      ]
+    },
+    "TASK-002": {
+      "name": "编码实现",
+      "status": "unlocked",
+      "round": 1
+    },
+    "TASK-003": {
+      "name": "结构化评审",
+      "status": "frozen",
+      "round": 1
+    },
+    "TASK-004": {
+      "name": "评审决策与返工路由",
+      "status": "frozen",
+      "round": 1
+    },
+    "TASK-005": {
+      "name": "提交 PR 与流程收尾",
+      "status": "frozen",
+      "round": 1
+    }
+  },
+  "result_policy": {
+    "allowed_result_tasks": [
+      "TASK-001",
+      "TASK-005",
+      "termination"
+    ],
+    "intermediate_tasks_must_not_create_result_json": true
+  },
+  "updated_at": "2026-05-18T00:00:00+08:00"
+}
