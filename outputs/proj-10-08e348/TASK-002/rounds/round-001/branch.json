@@ -1,0 +1,9 @@
+{
+  "task_code": "TASK-002",
+  "round_id": "round-001",
+  "base_branch": "main",
+  "work_branch": "task-001-personal-blog-20260518",
+  "head_commit": "d791aa19e22b7068843028c5e761783ab2e01f30",
+  "remote": "origin",
+  "pushed": true
+}

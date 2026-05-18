@@ -1,0 +1,17 @@
+{
+  "task_code": "TASK-002",
+  "round_id": "round-001",
+  "commands": [
+    "git pull",
+    "python3 -m unittest discover -s tests",
+    "git push -u origin task-001-personal-blog-20260518",
+    "git switch main",
+    "git pull"
+  ],
+  "artifacts": [
+    "outputs/proj-10-08e348/TASK-002/rounds/round-001/branch.json",
+    "outputs/proj-10-08e348/TASK-002/rounds/round-001/implementation-summary.md",
+    "outputs/proj-10-08e348/TASK-002/rounds/round-001/test-report.md",
+    "outputs/proj-10-08e348/TASK-002/usage.json"
+  ]
+}
