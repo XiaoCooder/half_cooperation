@@ -1,0 +1,12 @@
+{
+  "task_code": "TASK-001",
+  "used_network": true,
+  "network_sources": [
+    "https://api.github.com/repos/XiaoCooder/half_cooperation/issues/1"
+  ],
+  "commands": [
+    "git pull",
+    "curl -s https://api.github.com/repos/XiaoCooder/half_cooperation/issues/1"
+  ],
+  "no_code_changes": true
+}
