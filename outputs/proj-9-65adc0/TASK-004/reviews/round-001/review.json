@@ -1,0 +1,48 @@
+{
+  "task_code": "TASK-004",
+  "reviewer": "review-b",
+  "round": 1,
+  "round_id": "round-001",
+  "work_branch": "task-001-personal-homepage-20260518174253",
+  "head_commit": "b8c044a906d1c405db7575c38d24087346b635a4",
+  "approve_merge": false,
+  "verdict": "需要小修改后再合并",
+  "summary": "页面主体实现基本符合个人主页需求，测试通过；但近期动态和一个项目卡片存在无对应目标的内部锚点，核心内容点击后无有效反馈，建议修复后再合并。",
+  "findings": [
+    {
+      "severity": "medium",
+      "file": "index.html",
+      "lines": [54, 58, 62, 66, 85],
+      "title": "内部锚点链接没有对应目标",
+      "details": "近期动态标题指向 #article-*，Notes Studio 项目指向 #project-notes，但页面内没有匹配 id。点击后只会改变 URL 片段，无法展示文章或项目详情，不符合单页主页核心内容应高效可用的预期。",
+      "recommendation": "将这些标题/项目操作改为纯文本，或在同页补齐对应详情锚点/有效链接，并增加链接有效性测试。"
+    }
+  ],
+  "checks": [
+    {
+      "name": "git pull",
+      "status": "passed",
+      "details": "Already up to date."
+    },
+    {
+      "name": "flow-state gate",
+      "status": "passed",
+      "details": "TASK-004 is unlocked; round_id, work_branch, and head_commit read from current flow-state."
+    },
+    {
+      "name": "branch anchor consistency",
+      "status": "passed",
+      "details": "branch.json matches flow-state for round-001, work branch, and head commit."
+    },
+    {
+      "name": "pytest",
+      "status": "passed",
+      "command": "python3 -m pytest tests/test_static_homepage.py",
+      "details": "3 passed."
+    }
+  ],
+  "artifacts": [
+    "outputs/proj-9-65adc0/TASK-004/reviews/round-001/review.json",
+    "outputs/proj-9-65adc0/TASK-004/reviews/round-001/review.md"
+  ]
+}
