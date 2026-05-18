@@ -1,0 +1,23 @@
+{
+  "task_code": "TASK-005",
+  "round": 1,
+  "round_id": "round-001",
+  "work_branch": "issue-1-personal-homepage-20260518",
+  "head_commit": "4aa572157323e2beb0288fcd3ff82b1b5f3ab852",
+  "approve_merge": false,
+  "decision": "needs_fix",
+  "summary": "两份 review 都没有通过合并。核心问题一致：社交链接区未按需求使用图标，且内容区仍存在 `#` 占位链接，导致交互完成度不足。",
+  "reviews": [
+    {
+      "task_code": "TASK-003",
+      "approve_merge": false,
+      "verdict": "需要小修改后再合并"
+    },
+    {
+      "task_code": "TASK-004",
+      "approve_merge": false,
+      "conclusion": "需要小修改后再合并"
+    }
+  ],
+  "next_action": "return_to_TASK-002_for_fix"
+}

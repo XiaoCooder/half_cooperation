@@ -3,15 +3,15 @@
   "flow_type": "issue_code_review_loop",
   "current_round": 1,
   "round_id": "round-001",
-  "phase": "awaiting_review",
+  "phase": "needs_fix",
   "work_branch": "issue-1-personal-homepage-20260518",
   "head_commit": "4aa572157323e2beb0288fcd3ff82b1b5f3ab852",
   "max_review_rounds": 3,
   "task_states": {
     "TASK-001": "completed",
-    "TASK-002": "waiting_review",
-    "TASK-003": "unlocked",
-    "TASK-004": "unlocked",
+    "TASK-002": "needs_fix",
+    "TASK-003": "frozen",
+    "TASK-004": "frozen",
     "TASK-005": "frozen"
   }
 }
