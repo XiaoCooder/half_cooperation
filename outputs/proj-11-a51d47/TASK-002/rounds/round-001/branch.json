@@ -1,0 +1,10 @@
+{
+  "task_code": "TASK-002",
+  "round_id": "round-001",
+  "repo": "https://github.com/XiaoCooder/blog-test.git",
+  "base_branch": "main",
+  "work_branch": "issue-1-personal-homepage-20260518",
+  "head_commit": "4aa572157323e2beb0288fcd3ff82b1b5f3ab852",
+  "issue_url": "https://github.com/XiaoCooder/blog-test/issues/1",
+  "pushed": true
+}
