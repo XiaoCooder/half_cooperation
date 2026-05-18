@@ -1,0 +1,9 @@
+{
+  "task_code": "TASK-002",
+  "round_id": "round-001",
+  "base_branch": "main",
+  "work_branch": "task-001-personal-homepage-20260518174253",
+  "head_commit": "b8c044a906d1c405db7575c38d24087346b635a4",
+  "pushed": true,
+  "pr_created": false
+}
