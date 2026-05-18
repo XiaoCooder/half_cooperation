@@ -1,0 +1,14 @@
+{
+  "task_code": "TASK-005",
+  "repo": "https://github.com/XiaoCooder/blog-test.git",
+  "issue_url": "https://github.com/XiaoCooder/blog-test/issues/1",
+  "base_branch": "main",
+  "work_branch": "issue-1-readme-20260518",
+  "head_commit": "8ecca97cd44780495e30b9dfee17820e35519d74",
+  "pr_number": 2,
+  "pr_title": "Add empty README",
+  "pr_url": "https://github.com/XiaoCooder/blog-test/pull/2",
+  "state": "OPEN",
+  "is_draft": false,
+  "summary": "两份评审均批准后，已向 main 提交 PR。"
+}
