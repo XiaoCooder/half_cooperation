@@ -1,0 +1,34 @@
+{
+  "task_code": "TASK-004",
+  "reviewer": "review-b",
+  "round": 1,
+  "round_id": "round-001",
+  "work_branch": "task-001-personal-blog-20260518",
+  "head_commit": "d791aa19e22b7068843028c5e761783ab2e01f30",
+  "approve_merge": false,
+  "conclusion": "需要小修改后再合并",
+  "summary": "静态个人主页本身基本满足 issue 要求，且自带测试通过；但该工作分支相对 main 会删除并回退 outputs/proj-10-08e348 下的协作状态产物，合并会破坏当前 HALF 流程状态，因此当前不能批准合并。",
+  "findings": [
+    {
+      "severity": "blocking",
+      "title": "工作分支会删除/回退协作流程产物",
+      "location": "outputs/proj-10-08e348/flow-state.json:6",
+      "details": "分支 diff 会把 phase 从 awaiting_review 回退为 coding，将 work_branch/head_commit 置空，并冻结 TASK-003/TASK-004；同时还会删除 TASK-002 round-001 产物和 TASK-003 review 产物。项目规则要求协作产物只在 HALF main 分支维护，业务工作分支不应回退这些文件。若合并该 PR，当前评审流程状态会被破坏。"
+    }
+  ],
+  "checks": [
+    {
+      "command": "python3 -m unittest tests/test_static_homepage.py",
+      "workdir": "/tmp/proj-10-review-b",
+      "result": "passed",
+      "details": "Ran 4 tests in 0.003s; OK"
+    },
+    {
+      "command": "git diff --name-status main d791aa19e22b7068843028c5e761783ab2e01f30 -- outputs/proj-10-08e348",
+      "workdir": "/home/usr/half_cooperation",
+      "result": "failed_review",
+      "details": "Diff includes deletion of TASK-002/TASK-003 artifacts and modification of flow-state.json."
+    }
+  ],
+  "recommendation": "从工作分支中移除 outputs/proj-10-08e348 的变更，只保留 index.html、style.css 和相关测试后再进入下一轮评审。"
+}
