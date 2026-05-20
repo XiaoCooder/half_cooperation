@@ -3,15 +3,15 @@
   "flow_type": "issue_code_review_loop",
   "current_round": 1,
   "round_id": "round-001",
-  "phase": "coding",
-  "work_branch": null,
-  "head_commit": null,
+  "phase": "awaiting_review",
+  "work_branch": "issue-3-readme-20260520-1115",
+  "head_commit": "4b64ffdd13c84566c55b6000967830f25745f9cd",
   "max_review_rounds": 3,
   "task_states": {
     "TASK-001": "completed",
-    "TASK-002": "unlocked",
-    "TASK-003": "frozen",
-    "TASK-004": "frozen",
+    "TASK-002": "waiting_review",
+    "TASK-003": "unlocked",
+    "TASK-004": "unlocked",
     "TASK-005": "frozen"
   }
 }

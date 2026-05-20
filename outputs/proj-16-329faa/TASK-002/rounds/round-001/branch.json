@@ -1,0 +1,11 @@
+{
+  "task_code": "TASK-002",
+  "round_id": "round-001",
+  "repo": "https://github.com/XiaoCooder/blog-test.git",
+  "base_branch": "main",
+  "work_branch": "issue-3-readme-20260520-1115",
+  "head_commit": "4b64ffdd13c84566c55b6000967830f25745f9cd",
+  "issue_url": "https://github.com/XiaoCooder/blog-test/issues/3",
+  "remote": "origin",
+  "pushed": true
+}
