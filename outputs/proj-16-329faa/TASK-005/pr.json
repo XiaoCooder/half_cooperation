@@ -1,0 +1,14 @@
+{
+  "task_code": "TASK-005",
+  "repo": "https://github.com/XiaoCooder/blog-test.git",
+  "issue_url": "https://github.com/XiaoCooder/blog-test/issues/3",
+  "base_branch": "main",
+  "work_branch": "issue-3-readme-20260520-1115",
+  "head_commit": "4b64ffdd13c84566c55b6000967830f25745f9cd",
+  "pr_number": 4,
+  "pr_title": "Add repository README for issue #3",
+  "pr_url": "https://github.com/XiaoCooder/blog-test/pull/4",
+  "state": "OPEN",
+  "is_draft": false,
+  "summary": "两份评审均批准后，已向 main 发起 PR。"
+}
